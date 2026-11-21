@@ -1,0 +1,2808 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Trò Chơi Tình Yêu - Khánh Vy & Ngọc Trân</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Quicksand', sans-serif;
+            overflow: hidden;
+            user-select: none;
+            -webkit-user-select: none;
+            margin: 0;
+            padding: 0;
+            background-color: #161b33;
+        }
+
+        /* Tiêu đề 3D nổi bật */
+        .title-3d {
+            font-family: 'Fredoka', sans-serif;
+            background: linear-gradient(180deg, #ff758f 0%, #ffb703 55%, #ffd166 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 3px 0 #ffffff)
+                    drop-shadow(0 -3px 0 #ffffff)
+                    drop-shadow(3px 0 0 #ffffff)
+                    drop-shadow(-3px 0 0 #ffffff)
+                    drop-shadow(2px 2px 0 #ffffff)
+                    drop-shadow(-2px -2px 0 #ffffff)
+                    drop-shadow(2px -2px 0 #ffffff)
+                    drop-shadow(-2px 2px 0 #ffffff)
+                    drop-shadow(0 8px 15px rgba(255, 117, 143, 0.5));
+        }
+
+        /* Nút BẮT ĐẦU 3D */
+        .btn-start-3d {
+            font-family: 'Fredoka', sans-serif;
+            background: linear-gradient(180deg, #ffda3d 0%, #ff9e00 100%);
+            border: 4px solid #fff3b0;
+            box-shadow: 0 6px 0 #d97706, 0 12px 25px rgba(255, 158, 0, 0.6);
+            text-shadow: 0 2px 2px rgba(180, 83, 9, 0.5);
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .btn-start-3d:hover {
+            transform: translateY(-3px) scale(1.04);
+            box-shadow: 0 9px 0 #d97706, 0 16px 32px rgba(255, 190, 11, 0.85);
+            filter: brightness(1.05);
+        }
+        .btn-start-3d:active {
+            transform: translateY(4px) scale(0.98);
+            box-shadow: 0 2px 0 #d97706, 0 6px 12px rgba(255, 158, 0, 0.5);
+        }
+
+        @keyframes chibiWalk {
+            0%, 100% { transform: translateY(0px) rotate(-1.5deg); }
+            50% { transform: translateY(-8px) rotate(1.5deg); }
+        }
+        .animate-chibi-walk {
+            animation: chibiWalk 1.4s ease-in-out infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { transform: scale(0.85); opacity: 0.5; }
+            50% { transform: scale(1.25); opacity: 1; }
+        }
+        .animate-twinkle {
+            animation: twinkle 2.2s ease-in-out infinite;
+        }
+
+        @keyframes floatSlow {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        .animate-float {
+            animation: floatSlow 3s ease-in-out infinite;
+        }
+
+        @keyframes sway {
+            0%, 100% { transform: rotate(-3deg); }
+            50% { transform: rotate(3deg); }
+        }
+        .animate-sway {
+            animation: sway 2.5s ease-in-out infinite;
+            transform-origin: bottom center;
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0.6) translateY(20px); opacity: 0; }
+            80% { transform: scale(1.03) translateY(-3px); opacity: 1; }
+            100% { transform: scale(1) translateY(0); opacity: 1; }
+        }
+        .animate-pop-in {
+            animation: popIn 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        .garden-plot {
+            background: radial-gradient(ellipse at center, #7f4f24 0%, #582f0e 85%);
+            border: 4px solid #a47148;
+            box-shadow: inset 0 6px 12px rgba(0, 0, 0, 0.45), 0 6px 0 #432818, 0 10px 18px rgba(0, 0, 0, 0.25);
+            transition: transform 0.15s ease, border-color 0.2s ease;
+        }
+        .garden-plot:hover {
+            transform: translateY(-2px);
+            border-color: #ffd166;
+        }
+        .garden-plot:active {
+            transform: scale(0.96);
+        }
+
+        .tool-active {
+            border-color: #ff9e00 !important;
+            background: linear-gradient(180deg, #fffbeb 0%, #fef3c7 100%) !important;
+            transform: translateY(-6px) scale(1.06);
+            box-shadow: 0 8px 18px rgba(245, 158, 11, 0.4) !important;
+        }
+
+        @keyframes babyIdle {
+            0%, 100% { transform: translateY(0px) rotate(-1deg); }
+            50% { transform: translateY(-5px) rotate(1deg); }
+        }
+        .animate-baby-idle {
+            animation: babyIdle 2.2s ease-in-out infinite;
+        }
+
+        @keyframes babyGiggle {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            20% { transform: scale(1.08) rotate(-5deg); }
+            40% { transform: scale(1.08) rotate(5deg); }
+            60% { transform: scale(1.06) rotate(-4deg); }
+            80% { transform: scale(1.06) rotate(4deg); }
+        }
+        .animate-baby-giggle {
+            animation: babyGiggle 0.55s ease-in-out 2;
+        }
+
+        @keyframes zzzFloat {
+            0% { transform: translate(0, 0) scale(0.7); opacity: 0; }
+            30% { opacity: 1; }
+            100% { transform: translate(18px, -38px) scale(1.2); opacity: 0; }
+        }
+        .animate-zzz {
+            animation: zzzFloat 2.4s ease-out infinite;
+        }
+
+        @keyframes lampBlinkAnim {
+            0%, 100% { opacity: 0; }
+            25% { opacity: 0.45; background: radial-gradient(circle, rgba(255,243,176,0.9) 0%, rgba(255,183,3,0.35) 70%); }
+            50% { opacity: 0.85; background: rgba(15, 23, 42, 0.72); }
+            75% { opacity: 0.5; background: radial-gradient(circle, rgba(255,117,143,0.65) 0%, rgba(255,209,102,0.25) 75%); }
+        }
+        .animate-lamp-blink {
+            animation: lampBlinkAnim 0.7s infinite;
+        }
+
+        @keyframes drawHeartTrail {
+            0% { stroke-dashoffset: 680; opacity: 0.35; }
+            20% { opacity: 1; }
+            85% { stroke-dashoffset: 0; opacity: 1; }
+            100% { stroke-dashoffset: 0; opacity: 0.75; }
+        }
+        .heart-trail-path {
+            stroke-dasharray: 680;
+            stroke-dashoffset: 680;
+            animation: drawHeartTrail 4.2s ease-in-out infinite;
+        }
+
+        @keyframes planeFlyHeart {
+            0% { offset-distance: 0%; }
+            100% { offset-distance: 100%; }
+        }
+        .plane-heart-flyer {
+            offset-path: path("M 180 62 C 180 28, 122 10, 96 42 C 70 10, 12 28, 12 62 C 12 104, 96 144, 96 144 C 96 144, 180 104, 180 62 Z");
+            offset-rotate: auto 0deg;
+            animation: planeFlyHeart 4.2s linear infinite;
+        }
+
+        ::-webkit-scrollbar { width: 5px; height: 5px; }
+        ::-webkit-scrollbar-track { background: rgba(255,255,255,0.2); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: #f43f5e; border-radius: 10px; }
+    </style>
+</head>
+<body class="w-screen h-screen relative overflow-hidden">
+
+    <!-- Nút điều khiển âm thanh chung -->
+    <button id="btn-sound" onclick="toggleSound()"
+        class="fixed top-3 right-3 z-50 w-11 h-11 rounded-full bg-white/85 backdrop-blur-md border-2 border-amber-300 shadow-lg flex items-center justify-center text-xl hover:scale-105 active:scale-95 transition cursor-pointer"
+        title="Bật / Tắt âm thanh">
+        <span id="sound-icon">🔊</span>
+    </button>
+
+    <!-- ====================================================================== -->
+    <!-- MÀN HÌNH 1: TRANG MỞ ĐẦU                                             -->
+    <!-- ====================================================================== -->
+    <div id="screen-title" class="relative w-full h-full flex flex-col items-center justify-between overflow-hidden transition-opacity duration-500">
+        <svg class="absolute inset-0 w-full h-full object-cover" viewBox="0 0 1200 720" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <linearGradient id="nightSky" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#0f152e"/>
+                    <stop offset="55%" stop-color="#1e2749"/>
+                    <stop offset="100%" stop-color="#30345e"/>
+                </linearGradient>
+                <radialGradient id="lampGlow" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stop-color="#fff3b0" stop-opacity="0.95"/>
+                    <stop offset="35%" stop-color="#ffb703" stop-opacity="0.45"/>
+                    <stop offset="100%" stop-color="#fb8500" stop-opacity="0"/>
+                </radialGradient>
+                <linearGradient id="streetFloor" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#2b2d42"/>
+                    <stop offset="30%" stop-color="#8d5b4c"/>
+                    <stop offset="70%" stop-color="#f4a261"/>
+                    <stop offset="100%" stop-color="#ffca3a"/>
+                </linearGradient>
+                <linearGradient id="shopWindow" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#fff3b0"/>
+                    <stop offset="100%" stop-color="#ffb703"/>
+                </linearGradient>
+            </defs>
+
+            <rect width="1200" height="720" fill="url(#nightSky)"/>
+
+            <g fill="#fff3b0" opacity="0.85">
+                <circle cx="150" cy="80" r="2.5"/><circle cx="280" cy="50" r="2"/><circle cx="420" cy="95" r="3"/>
+                <circle cx="780" cy="60" r="2.5"/><circle cx="920" cy="110" r="2"/><circle cx="1050" cy="70" r="3"/>
+                <circle cx="340" cy="170" r="2"/><circle cx="860" cy="160" r="2.5"/><circle cx="600" cy="40" r="2"/>
+            </g>
+
+            <rect x="440" y="230" width="110" height="230" fill="#232946" rx="4"/>
+            <rect x="650" y="220" width="120" height="240" fill="#232946" rx="4"/>
+            <rect x="465" y="260" width="22" height="30" fill="#ffd166" opacity="0.7" rx="3"/>
+            <rect x="505" y="260" width="22" height="30" fill="#ffd166" opacity="0.5" rx="3"/>
+            <rect x="675" y="255" width="24" height="32" fill="#ffd166" opacity="0.7" rx="3"/>
+
+            <!-- Nhà bên trái -->
+            <g>
+                <polygon points="0,120 360,210 360,490 0,550" fill="#3d345b"/>
+                <polygon points="0,100 375,198 360,215 0,125" fill="#251f3d"/>
+                <rect x="190" y="225" width="55" height="65" rx="6" fill="url(#shopWindow)" stroke="#5c4d7d" stroke-width="4"/>
+                <rect x="275" y="242" width="45" height="55" rx="6" fill="url(#shopWindow)" stroke="#5c4d7d" stroke-width="4"/>
+                <polygon points="30,320 355,345 335,385 10,368" fill="#ff9f1c"/>
+                <polygon points="75,323 115,326 100,372 60,370" fill="#ffffff"/>
+                <polygon points="165,330 205,333 190,377 150,375" fill="#ffffff"/>
+                <polygon points="255,337 295,340 280,382 240,380" fill="#ffffff"/>
+                <polygon points="40,372 325,386 325,495 40,525" fill="url(#shopWindow)"/>
+                <polygon points="295,435 345,435 358,520 285,520" fill="#f4a261" stroke="#7f4f24" stroke-width="4"/>
+                <rect x="303" y="448" width="34" height="45" rx="4" fill="#fff3b0"/>
+            </g>
+
+            <!-- Nhà bên phải -->
+            <g>
+                <polygon points="1200,90 830,205 830,490 1200,560" fill="#463b66"/>
+                <polygon points="1200,70 815,193 830,210 1200,95" fill="#251f3d"/>
+                <rect x="860" y="285" width="230" height="42" rx="20" fill="#fff3b0" stroke="#ffb703" stroke-width="4"/>
+                <polygon points="845,345 1180,315 1195,365 865,385" fill="#ff9f1c"/>
+                <polygon points="895,341 935,337 950,380 910,382" fill="#ffffff"/>
+                <polygon points="985,333 1025,329 1040,374 1000,377" fill="#ffffff"/>
+                <polygon points="1075,325 1115,321 1130,368 1090,371" fill="#ffffff"/>
+                <polygon points="875,386 1165,368 1165,530 875,495" fill="url(#shopWindow)"/>
+                <polygon points="845,435 895,435 905,520 835,520" fill="#f4a261" stroke="#7f4f24" stroke-width="4"/>
+                <rect x="852" y="448" width="34" height="45" rx="4" fill="#fff3b0"/>
+            </g>
+
+            <polygon points="360,460 840,460 1200,620 1200,720 0,720 0,620" fill="url(#streetFloor)"/>
+            <polygon points="0,520 360,460 390,472 0,555" fill="#5c4d7d"/>
+            <polygon points="1200,520 840,460 810,472 1200,555" fill="#5c4d7d"/>
+
+            <!-- Cột đèn -->
+            <g>
+                <circle cx="195" cy="215" r="110" fill="url(#lampGlow)"/>
+                <rect x="190" y="240" width="10" height="310" fill="#2b2d42" rx="4"/>
+                <ellipse cx="195" cy="550" rx="22" ry="8" fill="#1d1e2c"/>
+                <polygon points="178,195 212,195 205,240 185,240" fill="#fff3b0" stroke="#2b2d42" stroke-width="4"/>
+                <polygon points="172,195 218,195 195,175" fill="#2b2d42"/>
+            </g>
+            <g>
+                <circle cx="385" cy="300" r="65" fill="url(#lampGlow)"/>
+                <rect x="382" y="315" width="6" height="165" fill="#2b2d42" rx="3"/>
+                <polygon points="374,290 396,290 392,315 378,315" fill="#fff3b0" stroke="#2b2d42" stroke-width="3"/>
+            </g>
+            <g>
+                <circle cx="815" cy="300" r="65" fill="url(#lampGlow)"/>
+                <rect x="812" y="315" width="6" height="165" fill="#2b2d42" rx="3"/>
+                <polygon points="804,290 826,290 822,315 808,315" fill="#fff3b0" stroke="#2b2d42" stroke-width="3"/>
+            </g>
+
+            <g>
+                <circle cx="70" cy="545" r="45" fill="#2d6a4f"/>
+                <circle cx="115" cy="560" r="35" fill="#40916c"/>
+                <circle cx="65" cy="535" r="6" fill="#ff758f"/>
+                <circle cx="95" cy="550" r="6" fill="#ffb703"/>
+                <circle cx="1120" cy="545" r="48" fill="#2d6a4f"/>
+                <circle cx="1070" cy="565" r="35" fill="#40916c"/>
+                <circle cx="1110" cy="535" r="6" fill="#ff758f"/>
+                <circle cx="1080" cy="555" r="6" fill="#ffb703"/>
+            </g>
+        </svg>
+
+        <div class="relative z-10 w-full max-w-2xl pt-6 sm:pt-10 px-4 text-center flex flex-col items-center">
+            <div class="relative inline-block">
+                <span class="absolute -top-3 -left-8 sm:-left-12 text-2xl sm:text-3xl animate-twinkle" style="animation-delay: 0.1s;">💗</span>
+                <span class="absolute top-8 -left-10 sm:-left-16 text-lg sm:text-xl text-yellow-200 animate-twinkle" style="animation-delay: 0.6s;">✦</span>
+                <span class="absolute -top-2 -right-8 sm:-right-12 text-2xl sm:text-3xl animate-twinkle" style="animation-delay: 0.3s;">💖</span>
+                <span class="absolute top-6 -right-12 sm:-right-16 text-2xl sm:text-3xl text-white animate-twinkle" style="animation-delay: 0.9s;">✦</span>
+                <span class="absolute -bottom-2 -right-6 text-xl sm:text-2xl animate-twinkle" style="animation-delay: 1.2s;">💕</span>
+
+                <h1 class="title-3d text-4xl sm:text-6xl md:text-7xl font-bold tracking-wide leading-tight select-none">
+                    TRÒ CHƠI<br>TÌNH YÊU
+                </h1>
+                <div class="mx-auto mt-1 w-48 sm:w-64 h-1.5 rounded-full bg-gradient-to-r from-amber-300 via-yellow-200 to-transparent opacity-90 shadow-[0_0_12px_#ffd166]"></div>
+            </div>
+        </div>
+
+        <div class="relative z-10 flex flex-col items-center justify-center my-auto">
+            <div class="flex items-center gap-6 mb-1">
+                <span class="text-xl sm:text-2xl animate-float" style="animation-delay: 0.2s;">💗</span>
+                <span class="text-lg sm:text-xl text-yellow-300 animate-twinkle">✨</span>
+            </div>
+
+            <div class="animate-chibi-walk drop-shadow-[0_14px_16px_rgba(0,0,0,0.45)]">
+                <svg class="w-64 h-64 sm:w-80 sm:h-80" viewBox="0 0 340 310" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <ellipse cx="115" cy="286" rx="46" ry="11" fill="rgba(67, 40, 24, 0.35)"/>
+                    <ellipse cx="225" cy="286" rx="46" ry="11" fill="rgba(67, 40, 24, 0.35)"/>
+
+                    <g id="chibi-boy">
+                        <rect x="92" y="232" width="16" height="36" rx="8" fill="#ffedd8" stroke="#4a2c2a" stroke-width="3.5"/>
+                        <rect x="122" y="232" width="16" height="36" rx="8" fill="#ffedd8" stroke="#4a2c2a" stroke-width="3.5"/>
+                        <path d="M84 266 C84 256, 112 256, 112 268 L112 276 L84 276 Z" fill="#ffffff" stroke="#4a2c2a" stroke-width="3.5" stroke-linejoin="round"/>
+                        <path d="M118 266 C118 256, 146 256, 146 268 L146 276 L118 276 Z" fill="#ffffff" stroke="#4a2c2a" stroke-width="3.5" stroke-linejoin="round"/>
+                        <path d="M86 205 L144 205 L148 240 L118 240 L115 225 L112 240 L82 240 Z" fill="#577590" stroke="#4a2c2a" stroke-width="3.5" stroke-linejoin="round"/>
+                        <path d="M85 168 C68 175, 68 198, 84 204" stroke="#4a2c2a" stroke-width="14" stroke-linecap="round"/>
+                        <path d="M85 168 C68 175, 68 198, 84 204" stroke="#ffedd8" stroke-width="8" stroke-linecap="round"/>
+                        <path d="M84 162 C84 155, 146 155, 146 162 L152 208 L78 208 Z" fill="#ffffff" stroke="#4a2c2a" stroke-width="3.5" stroke-linejoin="round"/>
+                        <path d="M95 160 L145 206" stroke="#4361ee" stroke-width="7" stroke-linecap="round"/>
+                        <rect x="136" y="196" width="22" height="18" rx="5" fill="#4895ef" stroke="#4a2c2a" stroke-width="3"/>
+                        <circle cx="115" cy="112" r="46" fill="#ffedd8" stroke="#4a2c2a" stroke-width="3.5"/>
+                        <path d="M66 112 C62 72, 92 52, 122 55 C148 52, 170 76, 164 114 C156 96, 145 92, 134 100 C124 88, 108 88, 98 102 C86 92, 74 96, 66 112 Z" fill="#6f4e37" stroke="#4a2c2a" stroke-width="3.5" stroke-linejoin="round"/>
+                        <path d="M110 56 C114 42, 128 42, 126 56" fill="#6f4e37" stroke="#4a2c2a" stroke-width="3.5" stroke-linecap="round"/>
+                        <path d="M92 114 Q99 107 106 114" stroke="#4a2c2a" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+                        <circle cx="131" cy="113" r="5.5" fill="#4a2c2a"/>
+                        <circle cx="129.5" cy="111" r="2" fill="#ffffff"/>
+                        <ellipse cx="88" cy="124" rx="7" ry="4" fill="#ff8fa3" opacity="0.7"/>
+                        <ellipse cx="142" cy="124" rx="7" ry="4" fill="#ff8fa3" opacity="0.7"/>
+                        <path d="M106 126 Q115 140 124 126 Z" fill="#ff758f" stroke="#4a2c2a" stroke-width="3" stroke-linejoin="round"/>
+                    </g>
+
+                    <g id="chibi-girl">
+                        <path d="M182 115 C172 155, 175 190, 192 198 L258 198 C275 190, 278 155, 268 115 Z" fill="#6f4e37" stroke="#4a2c2a" stroke-width="3.5"/>
+                        <rect x="204" y="234" width="15" height="34" rx="7.5" fill="#ffedd8" stroke="#4a2c2a" stroke-width="3.5"/>
+                        <rect x="232" y="234" width="15" height="34" rx="7.5" fill="#ffedd8" stroke="#4a2c2a" stroke-width="3.5"/>
+                        <path d="M196 266 C196 256, 223 256, 223 268 L223 276 L196 276 Z" fill="#ffb703" stroke="#4a2c2a" stroke-width="3.5" stroke-linejoin="round"/>
+                        <path d="M228 266 C228 256, 255 256, 255 268 L255 276 L228 276 Z" fill="#ffb703" stroke="#4a2c2a" stroke-width="3.5" stroke-linejoin="round"/>
+                        <path d="M194 164 L256 164 L262 205 L188 205 Z" fill="#ffffff" stroke="#4a2c2a" stroke-width="3.5"/>
+                        <path d="M256 168 C274 176, 274 198, 258 204" stroke="#4a2c2a" stroke-width="14" stroke-linecap="round"/>
+                        <path d="M256 168 C274 176, 274 198, 258 204" stroke="#ffffff" stroke-width="8" stroke-linecap="round"/>
+                        <path d="M198 164 L206 164 L206 182 L244 182 L244 164 L252 164 L266 238 L184 238 Z" fill="#ffd166" stroke="#4a2c2a" stroke-width="3.5" stroke-linejoin="round"/>
+                        <circle cx="205" cy="222" r="4" fill="#ffffff"/>
+                        <circle cx="242" cy="224" r="4" fill="#ffffff"/>
+                        <path d="M210 165 L254 208" stroke="#f77f00" stroke-width="5"/>
+                        <rect x="246" y="198" width="22" height="18" rx="6" fill="#fcbf49" stroke="#4a2c2a" stroke-width="3"/>
+                        <circle cx="225" cy="114" r="44" fill="#ffedd8" stroke="#4a2c2a" stroke-width="3.5"/>
+                        <path d="M181 112 C182 78, 268 78, 269 112 C256 98, 242 98, 234 106 C225 96, 215 96, 206 106 C196 98, 188 100, 181 112 Z" fill="#6f4e37" stroke="#4a2c2a" stroke-width="3.5"/>
+                        <ellipse cx="225" cy="82" rx="60" ry="15" fill="#ffe169" stroke="#4a2c2a" stroke-width="3.5"/>
+                        <path d="M186 80 C186 46, 264 46, 264 80 Z" fill="#ffd166" stroke="#4a2c2a" stroke-width="3.5"/>
+                        <path d="M187 74 Q225 82 263 74" stroke="#f77f00" stroke-width="5" fill="none"/>
+                        <path d="M201 115 Q208 106 215 115" stroke="#4a2c2a" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+                        <path d="M235 115 Q242 106 249 115" stroke="#4a2c2a" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+                        <ellipse cx="198" cy="124" rx="7" ry="4" fill="#ff8fa3" opacity="0.75"/>
+                        <ellipse cx="252" cy="124" rx="7" ry="4" fill="#ff8fa3" opacity="0.75"/>
+                        <path d="M216 126 Q225 140 234 126 Z" fill="#ff758f" stroke="#4a2c2a" stroke-width="3" stroke-linejoin="round"/>
+                    </g>
+
+                    <g id="holding-hands">
+                        <path d="M144 185 Q170 202 194 185" stroke="#4a2c2a" stroke-width="14" stroke-linecap="round" fill="none"/>
+                        <path d="M144 185 Q170 202 194 185" stroke="#ffedd8" stroke-width="8" stroke-linecap="round" fill="none"/>
+                        <circle cx="170" cy="195" r="9" fill="#ffedd8" stroke="#4a2c2a" stroke-width="3.5"/>
+                        <text x="170" y="175" font-size="18" text-anchor="middle">💕</text>
+                    </g>
+                </svg>
+            </div>
+        </div>
+
+        <div class="relative z-10 pb-8 sm:pb-12 px-4 flex flex-col items-center">
+            <button onclick="goToGardenScreen()"
+                class="btn-start-3d px-12 sm:px-16 py-3.5 sm:py-4 rounded-full text-white text-2xl sm:text-3xl font-bold tracking-wider uppercase cursor-pointer">
+                BẮT ĐẦU
+            </button>
+        </div>
+    </div>
+
+    <!-- ====================================================================== -->
+    <!-- MÀN HÌNH 2: TRÒ CHƠI TRỒNG HOA                                      -->
+    <!-- ====================================================================== -->
+    <div id="screen-garden" class="hidden relative w-full h-full flex flex-col justify-between bg-gradient-to-b from-sky-200 via-emerald-100 to-amber-100 overflow-hidden">
+        <div class="absolute inset-0 pointer-events-none overflow-hidden">
+            <div class="absolute top-6 left-8 w-20 h-20 rounded-full bg-amber-200/80 blur-md"></div>
+            <div class="absolute top-8 left-10 w-16 h-16 rounded-full bg-yellow-300 shadow-[0_0_40px_#fde047]"></div>
+            <div class="absolute top-12 left-1/4 text-5xl opacity-80 animate-float">☁️</div>
+            <div class="absolute top-8 right-1/4 text-6xl opacity-75 animate-float" style="animation-delay: 1.5s;">☁️</div>
+            <div class="absolute bottom-0 left-0 right-0 h-3/4 bg-gradient-to-b from-emerald-300 via-green-400 to-emerald-600 rounded-t-[45%]"></div>
+            <div class="absolute top-[23%] left-0 right-0 flex justify-around opacity-85 px-2">
+                <div class="w-4 h-16 bg-amber-50 border-2 border-amber-300 rounded-t-lg shadow-xs"></div>
+                <div class="w-4 h-16 bg-amber-50 border-2 border-amber-300 rounded-t-lg shadow-xs"></div>
+                <div class="w-4 h-16 bg-amber-50 border-2 border-amber-300 rounded-t-lg shadow-xs"></div>
+                <div class="w-4 h-16 bg-amber-50 border-2 border-amber-300 rounded-t-lg shadow-xs"></div>
+                <div class="w-4 h-16 bg-amber-50 border-2 border-amber-300 rounded-t-lg shadow-xs"></div>
+                <div class="w-4 h-16 bg-amber-50 border-2 border-amber-300 rounded-t-lg shadow-xs"></div>
+                <div class="w-4 h-16 bg-amber-50 border-2 border-amber-300 rounded-t-lg shadow-xs"></div>
+                <div class="w-4 h-16 bg-amber-50 border-2 border-amber-300 rounded-t-lg shadow-xs"></div>
+            </div>
+        </div>
+
+        <header class="relative z-20 pt-3 px-3 sm:px-6 pr-16 flex flex-wrap items-center justify-between gap-2">
+            <button onclick="goToTitleScreen()"
+                class="px-3.5 py-2 rounded-2xl bg-white/90 hover:bg-white border-2 border-rose-200 text-rose-600 font-bold text-xs sm:text-sm shadow-md flex items-center gap-1.5 transition active:scale-95 cursor-pointer">
+                <span>🏠</span>
+                <span class="hidden sm:inline">Trang chủ</span>
+            </button>
+
+            <div class="flex items-center gap-2 sm:gap-3">
+                <div class="px-3.5 py-1.5 rounded-2xl bg-white/90 border-2 border-amber-300 shadow-md flex items-center gap-1.5">
+                    <span class="text-lg">🪙</span>
+                    <div>
+                        <div class="text-[10px] font-bold text-amber-600 uppercase leading-none">Xu Vườn</div>
+                        <div id="hud-coins" class="text-sm sm:text-base font-extrabold text-amber-700 leading-tight">50</div>
+                    </div>
+                </div>
+
+                <div class="px-3.5 py-1.5 rounded-2xl bg-white/90 border-2 border-rose-300 shadow-md flex items-center gap-1.5">
+                    <span class="text-lg">💖</span>
+                    <div>
+                        <div class="text-[10px] font-bold text-rose-500 uppercase leading-none">Yêu Thương</div>
+                        <div id="hud-love-points" class="text-sm sm:text-base font-extrabold text-rose-600 leading-tight">0</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-1.5 sm:gap-2">
+                <button onclick="openCardsModal()"
+                    class="px-2.5 sm:px-3 py-2 rounded-2xl bg-rose-100/95 hover:bg-rose-200 border-2 border-rose-300 text-rose-700 font-bold text-xs sm:text-sm shadow-md flex items-center gap-1 transition active:scale-95 cursor-pointer">
+                    <span>💌</span>
+                    <span class="hidden md:inline">Kỷ Niệm</span>
+                    <span id="hud-cards-badge" class="bg-rose-500 text-white text-[11px] px-1.5 py-0.5 rounded-full">0/5</span>
+                </button>
+
+                <button onclick="openBouquetModal()"
+                    class="px-2.5 sm:px-3.5 py-2 rounded-2xl bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 text-white font-bold text-xs sm:text-sm shadow-md shadow-rose-400/40 flex items-center gap-1 transition active:scale-95 cursor-pointer">
+                    <span>💐</span>
+                    <span class="hidden sm:inline">Kết Bó Hoa</span>
+                    <span>(<span id="hud-bouquet-count">0</span>)</span>
+                </button>
+
+                <button id="btn-next-baby" onclick="goToBabyScreen()"
+                    class="px-3 sm:px-4 py-2 rounded-2xl bg-gradient-to-r from-amber-400 via-orange-400 to-rose-500 hover:brightness-105 border-2 border-yellow-200 text-white font-extrabold text-xs sm:text-sm shadow-lg shadow-amber-500/40 flex items-center gap-1 transition active:scale-95 cursor-pointer">
+                    <span>Chăm Con 👶 ➡️</span>
+                </button>
+            </div>
+        </header>
+
+        <main class="relative z-10 flex-1 flex flex-col items-center justify-center px-3 py-2">
+            <div class="w-full max-w-2xl flex items-center justify-between mb-2 sm:mb-4 px-2">
+                <div class="flex items-center gap-2.5 bg-white/85 backdrop-blur-xs px-3.5 py-2 rounded-2xl border-2 border-amber-200 shadow-sm">
+                    <span class="text-2xl sm:text-3xl animate-bounce">👫</span>
+                    <div class="text-xs sm:text-sm font-bold text-emerald-900" id="couple-speech">
+                        “Chọn hạt giống bên dưới rồi chạm vào ô đất để gieo mầm yêu thương nhé!”
+                    </div>
+                </div>
+            </div>
+
+            <div id="garden-grid" class="grid grid-cols-3 gap-3 sm:gap-5 w-full max-w-xl"></div>
+        </main>
+
+        <footer class="relative z-20 bg-white/90 backdrop-blur-md border-t-4 border-amber-300 px-2 sm:px-6 py-2.5 sm:py-3 shadow-[0_-8px_25px_rgba(0,0,0,0.12)]">
+            <div class="max-w-3xl mx-auto flex items-center justify-between gap-1.5 sm:gap-2.5 overflow-x-auto pb-1">
+                <div class="flex items-center gap-1.5 sm:gap-2 shrink-0 pr-2 border-r-2 border-amber-200">
+                    <button id="tool-water" onclick="selectTool('water')"
+                        class="tool-btn flex flex-col items-center justify-center w-14 sm:w-16 h-16 sm:h-18 rounded-2xl bg-sky-50 border-2 border-sky-200 text-sky-700 transition cursor-pointer p-1">
+                        <span class="text-xl sm:text-2xl">💧</span>
+                        <span class="text-[10px] sm:text-xs font-bold leading-tight mt-0.5">Tưới nước</span>
+                    </button>
+
+                    <button id="tool-fertilizer" onclick="selectTool('fertilizer')"
+                        class="tool-btn flex flex-col items-center justify-center w-14 sm:w-16 h-16 sm:h-18 rounded-2xl bg-amber-50 border-2 border-amber-200 text-amber-700 transition cursor-pointer p-1">
+                        <span class="text-xl sm:text-2xl">✨</span>
+                        <span class="text-[10px] sm:text-xs font-bold leading-tight mt-0.5">Bón phân</span>
+                        <span class="text-[9px] font-extrabold text-amber-600">10🪙</span>
+                    </button>
+
+                    <button id="tool-harvest" onclick="selectTool('harvest')"
+                        class="tool-btn flex flex-col items-center justify-center w-14 sm:w-16 h-16 sm:h-18 rounded-2xl bg-rose-50 border-2 border-rose-200 text-rose-700 transition cursor-pointer p-1">
+                        <span class="text-xl sm:text-2xl">🧺</span>
+                        <span class="text-[10px] sm:text-xs font-bold leading-tight mt-0.5">Thu hoạch</span>
+                    </button>
+                </div>
+
+                <div id="seed-toolbar" class="flex items-center gap-1.5 sm:gap-2 flex-1 justify-start sm:justify-around"></div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- ====================================================================== -->
+    <!-- MÀN HÌNH 3: TRÒ CHƠI CHĂM CON                                      -->
+    <!-- ====================================================================== -->
+    <div id="screen-baby" class="hidden relative w-full h-full flex flex-col justify-between bg-gradient-to-b from-amber-50 via-rose-50 to-pink-100 overflow-hidden transition-colors duration-700">
+        <div id="baby-night-overlay" class="hidden absolute inset-0 bg-indigo-950/55 pointer-events-none z-10 transition-opacity duration-700"></div>
+
+        <div class="absolute inset-0 pointer-events-none overflow-hidden">
+            <div class="w-full flex justify-around px-4 pt-12 opacity-65">
+                <div class="w-0 h-0 border-l-[14px] border-l-transparent border-r-[14px] border-r-transparent border-t-[20px] border-t-pink-300"></div>
+                <div class="w-0 h-0 border-l-[14px] border-l-transparent border-r-[14px] border-r-transparent border-t-[20px] border-t-amber-300"></div>
+                <div class="w-0 h-0 border-l-[14px] border-l-transparent border-r-[14px] border-r-transparent border-t-[20px] border-t-sky-300"></div>
+                <div class="w-0 h-0 border-l-[14px] border-l-transparent border-r-[14px] border-r-transparent border-t-[20px] border-t-emerald-300"></div>
+                <div class="w-0 h-0 border-l-[14px] border-l-transparent border-r-[14px] border-r-transparent border-t-[20px] border-t-rose-300"></div>
+                <div class="w-0 h-0 border-l-[14px] border-l-transparent border-r-[14px] border-r-transparent border-t-[20px] border-t-amber-300"></div>
+            </div>
+            <div class="hidden sm:flex absolute top-24 left-8 w-28 h-32 rounded-2xl bg-sky-200 border-4 border-amber-200 shadow-inner flex-col justify-between p-2 opacity-80">
+                <div class="text-2xl text-right">🌤️</div>
+                <div class="w-full h-1 bg-amber-200"></div>
+                <div class="text-xl">☁️</div>
+            </div>
+            <div id="baby-moon-lamp" class="hidden sm:flex absolute top-24 right-8 w-24 h-24 rounded-full bg-amber-100/80 border-2 border-amber-200 items-center justify-center text-4xl shadow-md">
+                🌙
+            </div>
+            <div class="absolute bottom-20 left-1/2 -translate-x-1/2 w-[90%] max-w-xl h-32 rounded-[50%] bg-rose-200/60 border-4 border-dashed border-rose-300/70"></div>
+        </div>
+
+        <header class="relative z-20 pt-3 px-3 sm:px-6 pr-16 flex flex-wrap items-center justify-between gap-2">
+            <button onclick="goBackToGardenFromBaby()"
+                class="px-3.5 py-2 rounded-2xl bg-white/90 hover:bg-white border-2 border-emerald-200 text-emerald-700 font-bold text-xs sm:text-sm shadow-md flex items-center gap-1.5 transition active:scale-95 cursor-pointer">
+                <span>🌻</span>
+                <span>Vườn Hoa</span>
+            </button>
+
+            <div class="flex items-center gap-2 sm:gap-3">
+                <button onclick="openRenameBabyModal()"
+                    class="px-3.5 py-1.5 rounded-2xl bg-white/90 hover:bg-rose-50 border-2 border-pink-300 shadow-md flex items-center gap-1.5 cursor-pointer transition">
+                    <span class="text-lg">👶</span>
+                    <div class="text-left">
+                        <div class="text-[10px] font-bold text-pink-500 uppercase leading-none">Thiên Thần Nhỏ ✏️</div>
+                        <div id="baby-name-display" class="text-sm sm:text-base font-extrabold text-rose-600 leading-tight">Bé Bông</div>
+                    </div>
+                </button>
+
+                <div class="px-3.5 py-1.5 rounded-2xl bg-white/90 border-2 border-amber-300 shadow-md flex items-center gap-1.5">
+                    <span class="text-lg">🏡</span>
+                    <div>
+                        <div class="text-[10px] font-bold text-amber-600 uppercase leading-none">Gắn Kết</div>
+                        <div id="baby-bond-points" class="text-sm sm:text-base font-extrabold text-amber-700 leading-tight">0</div>
+                    </div>
+                </div>
+            </div>
+
+            <button onclick="openFamilyMilestonesModal()"
+                class="px-3 py-2 rounded-2xl bg-amber-100/95 hover:bg-amber-200 border-2 border-amber-300 text-amber-800 font-bold text-xs sm:text-sm shadow-md flex items-center gap-1 transition active:scale-95 cursor-pointer">
+                <span>🏆</span>
+                <span class="hidden md:inline">Danh Hiệu</span>
+                <span id="baby-milestone-badge" class="bg-amber-500 text-white text-[11px] px-1.5 py-0.5 rounded-full">0/4</span>
+            </button>
+
+            <button onclick="goToCoupleLifeScreen()"
+                class="px-3 sm:px-4 py-2 rounded-2xl bg-gradient-to-r from-pink-500 via-rose-500 to-amber-500 hover:brightness-105 border-2 border-white text-white font-extrabold text-xs sm:text-sm shadow-lg shadow-rose-500/40 flex items-center gap-1 transition active:scale-95 cursor-pointer">
+                <span>💑 Sinh Hoạt ➡️</span>
+            </button>
+        </header>
+
+        <section class="relative z-20 w-full max-w-2xl mx-auto px-3 sm:px-6 mt-1">
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 bg-white/85 backdrop-blur-md p-2.5 rounded-2xl border-2 border-rose-200 shadow-sm">
+                <div>
+                    <div class="flex justify-between text-[11px] font-extrabold text-orange-700 mb-0.5">
+                        <span>🥣 Độ No</span>
+                        <span id="stat-hunger-val">75%</span>
+                    </div>
+                    <div class="w-full h-2.5 bg-orange-100 rounded-full overflow-hidden">
+                        <div id="stat-hunger-bar" class="h-full bg-gradient-to-r from-orange-400 to-amber-400 transition-all duration-300" style="width: 75%"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="flex justify-between text-[11px] font-extrabold text-sky-700 mb-0.5">
+                        <span>🍼 Sữa Ấm</span>
+                        <span id="stat-milk-val">70%</span>
+                    </div>
+                    <div class="w-full h-2.5 bg-sky-100 rounded-full overflow-hidden">
+                        <div id="stat-milk-bar" class="h-full bg-gradient-to-r from-sky-400 to-cyan-400 transition-all duration-300" style="width: 70%"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="flex justify-between text-[11px] font-extrabold text-indigo-700 mb-0.5">
+                        <span>💤 Giấc Ngủ</span>
+                        <span id="stat-sleep-val">80%</span>
+                    </div>
+                    <div class="w-full h-2.5 bg-indigo-100 rounded-full overflow-hidden">
+                        <div id="stat-sleep-bar" class="h-full bg-gradient-to-r from-indigo-400 to-purple-400 transition-all duration-300" style="width: 80%"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="flex justify-between text-[11px] font-extrabold text-rose-600 mb-0.5">
+                        <span>😄 Niềm Vui</span>
+                        <span id="stat-happy-val">85%</span>
+                    </div>
+                    <div class="w-full h-2.5 bg-rose-100 rounded-full overflow-hidden">
+                        <div id="stat-happy-bar" class="h-full bg-gradient-to-r from-rose-400 to-pink-500 transition-all duration-300" style="width: 85%"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <main class="relative z-20 flex-1 flex flex-col items-center justify-center px-3">
+            <div class="mb-2 flex items-center gap-2 bg-white/95 px-4 py-2 rounded-2xl border-2 border-pink-300 shadow-md max-w-md text-center">
+                <span id="baby-mood-icon" class="text-xl sm:text-2xl">🥰</span>
+                <p id="baby-speech" class="text-xs sm:text-sm font-extrabold text-rose-700">
+                    “Ba mẹ ơi! Bé đang rất vui khi được ở bên ba mẹ nè!”
+                </p>
+            </div>
+
+            <div id="baby-stage-box" class="relative flex flex-col items-center justify-center">
+                <div id="baby-need-bubble" class="hidden absolute -top-4 -right-6 z-30 w-14 h-14 rounded-full bg-white border-3 border-amber-400 shadow-lg flex items-center justify-center text-2xl animate-bounce">
+                    🍼
+                </div>
+                <div id="baby-zzz-fx" class="hidden absolute -top-2 right-4 z-30 text-indigo-300 font-extrabold text-2xl animate-zzz">
+                    Zzz... 💤
+                </div>
+                <div id="baby-action-prop" class="hidden absolute top-1/2 -left-10 z-30 text-4xl sm:text-5xl transition-all duration-300 drop-shadow-md">
+                    🥄
+                </div>
+
+                <div id="baby-character-wrapper" class="animate-baby-idle cursor-pointer" onclick="actionTickleBaby()">
+                    <svg class="w-56 h-56 sm:w-64 sm:h-64 drop-shadow-[0_12px_18px_rgba(244,63,94,0.22)]" viewBox="0 0 280 270" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <ellipse cx="140" cy="218" rx="98" ry="34" fill="#ffe4e6" stroke="#fda4af" stroke-width="4"/>
+                        <ellipse cx="140" cy="214" rx="76" ry="22" fill="#fff1f2"/>
+                        <ellipse cx="105" cy="212" rx="18" ry="13" fill="#ffedd8" stroke="#5c3a21" stroke-width="3.5"/>
+                        <ellipse cx="175" cy="212" rx="18" ry="13" fill="#ffedd8" stroke="#5c3a21" stroke-width="3.5"/>
+                        <path d="M92 155 C86 185, 92 212, 140 212 C188 212, 194 185, 188 155 Z" fill="#fef08a" stroke="#5c3a21" stroke-width="3.5" stroke-linejoin="round"/>
+                        <path d="M140 188 C130 180, 126 170, 133 166 C137 164, 140 168, 140 168 C140 168, 143 164, 147 166 C154 170, 150 180, 140 188 Z" fill="#fb7185"/>
+                        <path d="M93 162 C72 156, 68 176, 88 182" fill="#ffedd8" stroke="#5c3a21" stroke-width="3.5" stroke-linecap="round"/>
+                        <path d="M187 162 C208 156, 212 176, 192 182" fill="#ffedd8" stroke="#5c3a21" stroke-width="3.5" stroke-linecap="round"/>
+                        <circle cx="140" cy="108" r="56" fill="#ffedd8" stroke="#5c3a21" stroke-width="3.5"/>
+                        <circle cx="83" cy="112" r="10" fill="#ffedd8" stroke="#5c3a21" stroke-width="3.5"/>
+                        <circle cx="197" cy="112" r="10" fill="#ffedd8" stroke="#5c3a21" stroke-width="3.5"/>
+                        <path d="M126 53 C124 36, 142 34, 140 50 C145 36, 160 40, 152 54" stroke="#5c3a21" stroke-width="4" stroke-linecap="round" fill="none"/>
+                        <ellipse cx="104" cy="122" rx="11" ry="6.5" fill="#ff8fa3" opacity="0.75"/>
+                        <ellipse cx="176" cy="122" rx="11" ry="6.5" fill="#ff8fa3" opacity="0.75"/>
+
+                        <g id="baby-eyes-happy">
+                            <circle cx="114" cy="106" r="7.5" fill="#5c3a21"/>
+                            <circle cx="111.5" cy="103" r="2.8" fill="#ffffff"/>
+                            <circle cx="166" cy="106" r="7.5" fill="#5c3a21"/>
+                            <circle cx="163.5" cy="103" r="2.8" fill="#ffffff"/>
+                        </g>
+                        <g id="baby-eyes-giggle" class="hidden">
+                            <path d="M104 108 Q114 96 124 108" stroke="#5c3a21" stroke-width="4.5" stroke-linecap="round" fill="none"/>
+                            <path d="M156 108 Q166 96 176 108" stroke="#5c3a21" stroke-width="4.5" stroke-linecap="round" fill="none"/>
+                        </g>
+                        <g id="baby-eyes-sleep" class="hidden">
+                            <path d="M104 108 Q114 116 124 108" stroke="#5c3a21" stroke-width="4" stroke-linecap="round" fill="none"/>
+                            <path d="M156 108 Q166 116 176 108" stroke="#5c3a21" stroke-width="4" stroke-linecap="round" fill="none"/>
+                        </g>
+                        <g id="baby-eyes-sad" class="hidden">
+                            <path d="M105 103 L122 109 L105 114" stroke="#5c3a21" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                            <path d="M175 103 L158 109 L175 114" stroke="#5c3a21" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                        </g>
+
+                        <path id="baby-mouth-smile" d="M128 126 Q140 142 152 126 Z" fill="#fb7185" stroke="#5c3a21" stroke-width="3.2" stroke-linejoin="round"/>
+                        <circle id="baby-mouth-o" class="hidden" cx="140" cy="131" r="8" fill="#fb7185" stroke="#5c3a21" stroke-width="3.2"/>
+                        <path id="baby-mouth-sad" class="hidden" d="M127 136 Q140 124 153 136" stroke="#5c3a21" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+                    </svg>
+                </div>
+            </div>
+        </main>
+
+        <footer class="relative z-20 bg-white/95 backdrop-blur-md border-t-4 border-pink-300 px-3 sm:px-6 py-3 shadow-[0_-8px_25px_rgba(244,63,94,0.12)]">
+            <div class="max-w-2xl mx-auto grid grid-cols-4 gap-2 sm:gap-4">
+                <button onclick="actionFeedBaby()"
+                    class="flex flex-col items-center justify-center py-2.5 px-1 rounded-2xl bg-gradient-to-b from-orange-50 to-amber-100 hover:from-orange-100 hover:to-amber-200 border-2 border-orange-300 text-orange-800 shadow-sm transition active:scale-95 cursor-pointer">
+                    <span class="text-2xl sm:text-3xl mb-0.5">🥣</span>
+                    <span class="text-[11px] sm:text-sm font-extrabold leading-tight">Đút con ăn</span>
+                </button>
+
+                <button onclick="actionGiveMilk()"
+                    class="flex flex-col items-center justify-center py-2.5 px-1 rounded-2xl bg-gradient-to-b from-sky-50 to-cyan-100 hover:from-sky-100 hover:to-cyan-200 border-2 border-sky-300 text-sky-800 shadow-sm transition active:scale-95 cursor-pointer">
+                    <span class="text-2xl sm:text-3xl mb-0.5">🍼</span>
+                    <span class="text-[11px] sm:text-sm font-extrabold leading-tight">Uống sữa</span>
+                </button>
+
+                <button id="btn-lullaby" onclick="actionLullabySleep()"
+                    class="flex flex-col items-center justify-center py-2.5 px-1 rounded-2xl bg-gradient-to-b from-indigo-50 to-purple-100 hover:from-indigo-100 hover:to-purple-200 border-2 border-indigo-300 text-indigo-800 shadow-sm transition active:scale-95 cursor-pointer">
+                    <span class="text-2xl sm:text-3xl mb-0.5">🌙</span>
+                    <span id="btn-lullaby-label" class="text-[11px] sm:text-sm font-extrabold leading-tight">Ru con ngủ</span>
+                </button>
+
+                <button onclick="actionTickleBaby()"
+                    class="flex flex-col items-center justify-center py-2.5 px-1 rounded-2xl bg-gradient-to-b from-rose-50 to-pink-100 hover:from-rose-100 hover:to-pink-200 border-2 border-rose-300 text-rose-800 shadow-sm transition active:scale-95 cursor-pointer">
+                    <span class="text-2xl sm:text-3xl mb-0.5">🧸</span>
+                    <span class="text-[11px] sm:text-sm font-extrabold leading-tight">Chọc cười</span>
+                </button>
+            </div>
+        </footer>
+    </div>
+
+    <!-- ====================================================================== -->
+    <!-- MÀN HÌNH 4: TRÒ SINH HOẠT CỦA CẶP ĐÔI                                 -->
+    <!-- ====================================================================== -->
+    <div id="screen-couple-life" class="hidden relative w-full h-full flex flex-col justify-between bg-gradient-to-b from-rose-100 via-amber-50 to-orange-100 overflow-hidden transition-all duration-500">
+        <div id="couple-lamp-layer" class="pointer-events-none fixed inset-0 z-10 transition-opacity duration-300 opacity-0"></div>
+
+        <div id="couple-scene-backdrop" class="pointer-events-none absolute inset-0 overflow-hidden transition-all duration-500">
+            <div class="absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-b from-amber-200/75 to-amber-300/90 border-t-4 border-amber-400/60"></div>
+
+            <div id="scene-dining-table" class="hidden absolute bottom-20 sm:bottom-24 left-1/2 -translate-x-1/2 w-[88%] max-w-2xl z-20 pointer-events-auto">
+                <div class="flex justify-around items-end mb-1 px-6 text-2xl sm:text-4xl">
+                    <button type="button" onclick="coupleEatFoodItem('🍲', 'Súp nóng hổi', event)" class="hover:scale-125 active:scale-95 transition cursor-pointer drop-shadow-md">🍲</button>
+                    <button type="button" onclick="coupleEatFoodItem('🥗', 'Salad tươi mát', event)" class="hover:scale-125 active:scale-95 transition cursor-pointer drop-shadow-md">🥗</button>
+                    <button type="button" onclick="coupleEatFoodItem('🍰', 'Bánh ngọt tình yêu', event)" class="hover:scale-125 active:scale-95 transition cursor-pointer drop-shadow-md">🍰</button>
+                    <button type="button" onclick="coupleEatFoodItem('🥂', 'Ly nước trái cây mát lạnh', event)" class="hover:scale-125 active:scale-95 transition cursor-pointer drop-shadow-md">🥂</button>
+                </div>
+                <div class="w-full h-7 sm:h-9 rounded-2xl bg-gradient-to-b from-amber-600 to-amber-800 border-4 border-amber-900/40 shadow-xl"></div>
+                <div class="flex justify-between px-12">
+                    <div class="w-4 h-12 bg-amber-900/70 rounded-b-lg"></div>
+                    <div class="w-4 h-12 bg-amber-900/70 rounded-b-lg"></div>
+                </div>
+            </div>
+
+            <div id="scene-bed" class="hidden absolute bottom-16 sm:bottom-20 left-1/2 -translate-x-1/2 w-[90%] max-w-2xl z-0">
+                <div class="w-full h-24 sm:h-28 rounded-t-3xl bg-gradient-to-b from-rose-200 to-pink-300 border-4 border-rose-400/60 shadow-2xl flex items-start justify-around pt-3 px-8">
+                    <div class="w-24 sm:w-32 h-10 rounded-2xl bg-white border-2 border-rose-200 shadow-xs"></div>
+                    <div class="w-24 sm:w-32 h-10 rounded-2xl bg-white border-2 border-rose-200 shadow-xs"></div>
+                </div>
+                <div class="w-full h-6 rounded-b-xl bg-amber-800"></div>
+            </div>
+
+            <div id="scene-commute" class="hidden absolute inset-0 pointer-events-none z-0">
+                <div class="absolute top-16 left-8 text-5xl animate-float">☀️</div>
+                <div class="absolute top-20 right-12 text-4xl bg-white/85 px-4 py-2 rounded-2xl border-2 border-sky-300 shadow-md font-extrabold text-sky-800">
+                    🏢 Văn Phòng Yêu Thương
+                </div>
+                <div class="absolute bottom-24 left-6 text-4xl">🌳</div>
+                <div class="absolute bottom-24 right-8 text-4xl">☕</div>
+            </div>
+        </div>
+
+        <header class="relative z-20 pt-3 px-3 sm:px-6 pr-16 flex flex-wrap items-center justify-between gap-2">
+            <div class="flex items-center gap-2">
+                <button onclick="goBackToBabyFromCoupleLife()"
+                    class="px-3.5 py-2 rounded-2xl bg-white/90 hover:bg-white border-2 border-pink-300 text-rose-700 font-bold text-xs sm:text-sm shadow-md flex items-center gap-1.5 transition active:scale-95 cursor-pointer">
+                    <span>👶</span>
+                    <span>Chăm Con</span>
+                </button>
+                <button onclick="goToTitleScreen()"
+                    class="px-3 py-2 rounded-2xl bg-white/90 hover:bg-white border-2 border-amber-300 text-amber-800 font-bold text-xs sm:text-sm shadow-md flex items-center gap-1 transition active:scale-95 cursor-pointer">
+                    <span>🏠</span>
+                    <span class="hidden sm:inline">Trang chủ</span>
+                </button>
+            </div>
+
+            <div class="flex items-center gap-2 sm:gap-3">
+                <button onclick="openRenameCoupleModal()"
+                    class="px-3 py-1.5 rounded-2xl bg-white/90 hover:bg-rose-50 border-2 border-pink-300 shadow-md flex items-center gap-1.5 cursor-pointer transition"
+                    title="Đổi tên cho 2 nhân vật">
+                    <span class="text-base">✏️</span>
+                    <div class="text-left leading-tight">
+                        <div class="text-[9px] font-bold text-pink-500 uppercase">Đổi tên cặp đôi</div>
+                        <div class="text-xs font-extrabold text-rose-700">
+                            <span id="couple-name-boy-badge">Áo Trắng</span> & <span id="couple-name-girl-badge">Áo Vàng</span>
+                        </div>
+                    </div>
+                </button>
+
+                <div class="px-3.5 py-1.5 rounded-2xl bg-white/90 border-2 border-rose-300 shadow-md flex items-center gap-1.5">
+                    <span class="text-lg">💞</span>
+                    <div>
+                        <div class="text-[10px] font-bold text-rose-500 uppercase leading-none">Hạnh Phúc</div>
+                        <div id="couple-life-points" class="text-sm sm:text-base font-extrabold text-rose-600 leading-tight">0</div>
+                    </div>
+                </div>
+
+                <button id="btn-room-lamp" onclick="handleRoomLampClick()"
+                    class="px-3.5 py-2 rounded-2xl bg-amber-100 hover:bg-amber-200 border-2 border-amber-400 text-amber-900 font-extrabold text-xs sm:text-sm shadow-md flex items-center gap-1.5 transition active:scale-95 cursor-pointer">
+                    <span id="room-lamp-icon" class="text-lg">💡</span>
+                    <span id="room-lamp-label">Đèn: Tắt</span>
+                </button>
+            </div>
+        </header>
+
+        <main class="relative z-20 flex-1 flex flex-col items-center justify-center px-3">
+            <div class="mb-2 bg-white/95 backdrop-blur-xs px-4 py-2 rounded-2xl border-2 border-rose-300 shadow-md max-w-lg text-center">
+                <p id="couple-life-speech" class="text-xs sm:text-sm font-extrabold text-rose-700">
+                    “Hôm nay chúng mình cùng làm gì nào? Bấm nút bên dưới để sinh hoạt cùng nhau nhé!”
+                </p>
+            </div>
+
+            <div id="couple-active-food-icon" class="hidden mb-1 px-4 py-1 rounded-full bg-amber-100/95 border-2 border-amber-400 text-3xl sm:text-4xl shadow-md animate-bounce">
+                🍲
+            </div>
+
+            <div id="couple-dual-bubbles" class="hidden w-full max-w-xl grid grid-cols-2 gap-2 sm:gap-4 mb-2 px-1 z-30">
+                <div class="bg-white/95 border-2 border-sky-300 rounded-2xl px-3 py-2 shadow-md text-center animate-pop-in">
+                    <div id="label-boy-life" class="text-[10px] font-extrabold uppercase text-sky-600 mb-0.5">👕 Bạn Áo Trắng</div>
+                    <div id="speech-boy-life" class="text-xs sm:text-sm font-extrabold text-slate-800 leading-snug"></div>
+                </div>
+                <div class="bg-white/95 border-2 border-amber-400 rounded-2xl px-3 py-2 shadow-md text-center animate-pop-in">
+                    <div id="label-girl-life" class="text-[10px] font-extrabold uppercase text-amber-600 mb-0.5">👗 Bạn Áo Vàng</div>
+                    <div id="speech-girl-life" class="text-xs sm:text-sm font-extrabold text-amber-900 leading-snug"></div>
+                </div>
+            </div>
+
+            <div class="relative w-full max-w-xl h-60 sm:h-72 flex items-end justify-center">
+                <div id="couple-kiss-fx" class="hidden absolute top-4 sm:top-6 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center pointer-events-none animate-bounce">
+                    <div class="text-4xl sm:text-5xl drop-shadow-lg">💋</div>
+                    <div class="text-lg sm:text-xl text-rose-500 font-extrabold">💖 Muah! 💖</div>
+                </div>
+
+                <div id="life-boy-wrap" class="relative z-10 transition-all duration-500 ease-out" style="transform: translateX(0px);">
+                    <div id="life-boy-food-hand" class="hidden absolute top-24 -right-3 z-20 text-2xl sm:text-3xl drop-shadow-md animate-bounce">🍲</div>
+                    <svg class="w-36 h-48 sm:w-44 sm:h-56 drop-shadow-md" viewBox="0 0 180 230" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="64" y="172" width="14" height="36" rx="7" fill="#ffedd8" stroke="#4a2c2a" stroke-width="3.5"/>
+                        <rect x="96" y="172" width="14" height="36" rx="7" fill="#ffedd8" stroke="#4a2c2a" stroke-width="3.5"/>
+                        <rect x="58" y="204" width="24" height="11" rx="5.5" fill="#ffffff" stroke="#4a2c2a" stroke-width="3"/>
+                        <rect x="92" y="204" width="24" height="11" rx="5.5" fill="#ffffff" stroke="#4a2c2a" stroke-width="3"/>
+                        <path d="M58 145 L116 145 L118 178 L92 178 L87 162 L82 178 L56 178 Z" fill="#4361ee" stroke="#4a2c2a" stroke-width="3.5" stroke-linejoin="round"/>
+                        <path id="life-boy-shirt" d="M56 105 C56 98, 118 98, 118 105 L122 148 L52 148 Z" fill="#ffffff" stroke="#4a2c2a" stroke-width="3.5"/>
+                        <rect id="life-boy-briefcase" class="hidden" x="34" y="144" width="24" height="18" rx="4" fill="#8d5b4c" stroke="#4a2c2a" stroke-width="3"/>
+                        <path d="M114 114 Q142 122 152 128" stroke="#4a2c2a" stroke-width="11" stroke-linecap="round" fill="none"/>
+                        <path d="M114 114 Q142 122 152 128" stroke="#ffedd8" stroke-width="6" stroke-linecap="round" fill="none"/>
+                        <circle cx="87" cy="68" r="38" fill="#ffedd8" stroke="#4a2c2a" stroke-width="3.5"/>
+                        <path d="M47 68 C45 36, 70 20, 92 22 C114 20, 132 40, 127 70 C118 55, 108 52, 98 58 C90 48, 78 48, 70 59 C60 52, 52 55, 47 68 Z" fill="#6f4e37" stroke="#4a2c2a" stroke-width="3.5"/>
+                        <g id="life-boy-eyes-open">
+                            <circle cx="74" cy="70" r="4.5" fill="#4a2c2a"/>
+                            <circle cx="101" cy="70" r="4.5" fill="#4a2c2a"/>
+                        </g>
+                        <g id="life-boy-eyes-closed" class="hidden">
+                            <path d="M69 71 Q74 65 79 71" stroke="#4a2c2a" stroke-width="3" stroke-linecap="round" fill="none"/>
+                            <path d="M96 71 Q101 65 106 71" stroke="#4a2c2a" stroke-width="3" stroke-linecap="round" fill="none"/>
+                        </g>
+                        <ellipse cx="66" cy="79" rx="5.5" ry="3.5" fill="#ff8fa3" opacity="0.7"/>
+                        <ellipse cx="108" cy="79" rx="5.5" ry="3.5" fill="#ff8fa3" opacity="0.7"/>
+                        <path d="M80 81 Q87 91 94 81 Z" fill="#ff758f" stroke="#4a2c2a" stroke-width="2.5" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+
+                <div id="life-girl-wrap" class="relative z-10 transition-all duration-500 ease-out" style="transform: translateX(0px);">
+                    <div id="life-girl-food-hand" class="hidden absolute top-24 -left-3 z-20 text-2xl sm:text-3xl drop-shadow-md animate-bounce">🍲</div>
+                    <svg class="w-36 h-48 sm:w-44 sm:h-56 drop-shadow-md" viewBox="0 0 180 230" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M56 68 C46 102, 48 134, 62 142 L124 142 C138 134, 140 102, 130 68 Z" fill="#6f4e37" stroke="#4a2c2a" stroke-width="3.5"/>
+                        <rect x="74" y="174" width="13" height="34" rx="6.5" fill="#ffedd8" stroke="#4a2c2a" stroke-width="3.5"/>
+                        <rect x="101" y="174" width="13" height="34" rx="6.5" fill="#ffedd8" stroke="#4a2c2a" stroke-width="3.5"/>
+                        <rect x="68" y="204" width="23" height="11" rx="5.5" fill="#ffb703" stroke="#4a2c2a" stroke-width="3"/>
+                        <rect x="97" y="204" width="23" height="11" rx="5.5" fill="#ffb703" stroke="#4a2c2a" stroke-width="3"/>
+                        <path d="M66 106 L122 106 L134 176 L54 176 Z" fill="#ffd166" stroke="#4a2c2a" stroke-width="3.5" stroke-linejoin="round"/>
+                        <rect id="life-girl-bag" class="hidden" x="124" y="144" width="22" height="18" rx="5" fill="#fb7185" stroke="#4a2c2a" stroke-width="3"/>
+                        <path d="M68 115 Q40 123 28 129" stroke="#4a2c2a" stroke-width="11" stroke-linecap="round" fill="none"/>
+                        <path d="M68 115 Q40 123 28 129" stroke="#ffedd8" stroke-width="6" stroke-linecap="round" fill="none"/>
+                        <circle cx="94" cy="70" r="37" fill="#ffedd8" stroke="#4a2c2a" stroke-width="3.5"/>
+                        <path d="M57 68 C58 40, 130 40, 131 68 C120 56, 108 56, 101 63 C94 55, 86 55, 79 63 C70 56, 63 58, 57 68 Z" fill="#6f4e37" stroke="#4a2c2a" stroke-width="3.5"/>
+                        <ellipse cx="94" cy="43" rx="48" ry="12" fill="#ffe169" stroke="#4a2c2a" stroke-width="3.5"/>
+                        <path d="M62 42 C62 15, 126 15, 126 42 Z" fill="#ffd166" stroke="#4a2c2a" stroke-width="3.5"/>
+                        <g id="life-girl-eyes-open">
+                            <path d="M74 71 Q80 64 86 71" stroke="#4a2c2a" stroke-width="3" stroke-linecap="round" fill="none"/>
+                            <path d="M102 71 Q108 64 114 71" stroke="#4a2c2a" stroke-width="3" stroke-linecap="round" fill="none"/>
+                        </g>
+                        <g id="life-girl-eyes-closed" class="hidden">
+                            <path d="M74 72 Q80 77 86 72" stroke="#4a2c2a" stroke-width="3" stroke-linecap="round" fill="none"/>
+                            <path d="M102 72 Q108 77 114 72" stroke="#4a2c2a" stroke-width="3" stroke-linecap="round" fill="none"/>
+                        </g>
+                        <ellipse cx="72" cy="79" rx="5.5" ry="3.5" fill="#ff8fa3" opacity="0.75"/>
+                        <ellipse cx="116" cy="79" rx="5.5" ry="3.5" fill="#ff8fa3" opacity="0.75"/>
+                        <path d="M87 81 Q94 91 101 81 Z" fill="#ff758f" stroke="#4a2c2a" stroke-width="2.5" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+            </div>
+        </main>
+
+        <footer class="relative z-20 bg-white/95 backdrop-blur-md border-t-4 border-rose-300 px-2 sm:px-6 py-3 shadow-[0_-8px_25px_rgba(244,63,94,0.14)]">
+            <div class="max-w-4xl mx-auto grid grid-cols-3 sm:grid-cols-6 gap-1.5 sm:gap-2.5">
+                <button onclick="coupleActionHug()"
+                    class="flex flex-col items-center justify-center py-2.5 px-1 rounded-2xl bg-pink-50 hover:bg-pink-100 border-2 border-pink-300 text-pink-800 shadow-xs transition active:scale-95 cursor-pointer">
+                    <span class="text-xl sm:text-2xl mb-0.5">🤗</span>
+                    <span class="text-[10px] sm:text-xs font-extrabold leading-tight text-center">Ôm nhau</span>
+                </button>
+
+                <button onclick="coupleActionKiss()"
+                    class="flex flex-col items-center justify-center py-2.5 px-1 rounded-2xl bg-rose-50 hover:bg-rose-100 border-2 border-rose-300 text-rose-800 shadow-xs transition active:scale-95 cursor-pointer">
+                    <span class="text-xl sm:text-2xl mb-0.5">💋</span>
+                    <span class="text-[10px] sm:text-xs font-extrabold leading-tight text-center">Hôn nhau</span>
+                </button>
+
+                <button onclick="coupleActionEatTogether()"
+                    class="flex flex-col items-center justify-center py-2.5 px-1 rounded-2xl bg-amber-50 hover:bg-amber-100 border-2 border-amber-300 text-amber-800 shadow-xs transition active:scale-95 cursor-pointer">
+                    <span class="text-xl sm:text-2xl mb-0.5">🍽️</span>
+                    <span class="text-[10px] sm:text-xs font-extrabold leading-tight text-center">Ngồi bàn ăn</span>
+                </button>
+
+                <button onclick="coupleActionGoToWork()"
+                    class="flex flex-col items-center justify-center py-2.5 px-1 rounded-2xl bg-sky-50 hover:bg-sky-100 border-2 border-sky-300 text-sky-800 shadow-xs transition active:scale-95 cursor-pointer">
+                    <span class="text-xl sm:text-2xl mb-0.5">💼</span>
+                    <span class="text-[10px] sm:text-xs font-extrabold leading-tight text-center">Cùng đi làm</span>
+                </button>
+
+                <button onclick="coupleActionGoToSleep()"
+                    class="flex flex-col items-center justify-center py-2.5 px-1 rounded-2xl bg-indigo-50 hover:bg-indigo-100 border-2 border-indigo-300 text-indigo-800 shadow-xs transition active:scale-95 cursor-pointer">
+                    <span class="text-xl sm:text-2xl mb-0.5">🛌</span>
+                    <span class="text-[10px] sm:text-xs font-extrabold leading-tight text-center">Cùng đi ngủ</span>
+                </button>
+
+                <button onclick="goToLoveQuizScreen()"
+                    class="flex flex-col items-center justify-center py-2.5 px-1 rounded-2xl bg-gradient-to-b from-fuchsia-500 to-rose-500 hover:brightness-105 border-2 border-white text-white shadow-md transition active:scale-95 cursor-pointer">
+                    <span class="text-xl sm:text-2xl mb-0.5">❓</span>
+                    <span class="text-[10px] sm:text-xs font-extrabold leading-tight text-center">Trắc Nghiệm ➡️</span>
+                </button>
+            </div>
+        </footer>
+    </div>
+
+    <!-- ====================================================================== -->
+    <!-- MÀN HÌNH 5: TRÒ CHƠI TRẮC NGHIỆM TÌNH YÊU                              -->
+    <!-- ====================================================================== -->
+    <div id="screen-love-quiz" class="hidden relative w-full h-full flex flex-col justify-between bg-gradient-to-b from-sky-200 via-emerald-100 to-lime-200 overflow-hidden">
+        <div class="pointer-events-none absolute inset-0 overflow-hidden">
+            <div class="absolute top-6 left-8 w-20 h-20 rounded-full bg-yellow-200/80 blur-md"></div>
+            <div class="absolute top-8 left-10 w-14 h-14 rounded-full bg-amber-300 shadow-[0_0_35px_#fde047]"></div>
+            <div class="absolute top-12 left-1/4 text-5xl opacity-80 animate-float">☁️</div>
+            <div class="absolute top-10 right-1/4 text-5xl opacity-75 animate-float" style="animation-delay: 1.2s;">☁️</div>
+            <div class="absolute bottom-0 left-0 right-0 h-3/4 bg-gradient-to-b from-emerald-300 via-green-400 to-emerald-600 rounded-t-[45%]"></div>
+            <div class="absolute top-[22%] left-0 right-0 flex justify-around opacity-85 px-2">
+                <div class="w-3.5 h-14 bg-amber-50 border-2 border-amber-300 rounded-t-lg"></div>
+                <div class="w-3.5 h-14 bg-amber-50 border-2 border-amber-300 rounded-t-lg"></div>
+                <div class="w-3.5 h-14 bg-amber-50 border-2 border-amber-300 rounded-t-lg"></div>
+                <div class="w-3.5 h-14 bg-amber-50 border-2 border-amber-300 rounded-t-lg"></div>
+                <div class="w-3.5 h-14 bg-amber-50 border-2 border-amber-300 rounded-t-lg"></div>
+                <div class="w-3.5 h-14 bg-amber-50 border-2 border-amber-300 rounded-t-lg"></div>
+                <div class="w-3.5 h-14 bg-amber-50 border-2 border-amber-300 rounded-t-lg"></div>
+                <div class="w-3.5 h-14 bg-amber-50 border-2 border-amber-300 rounded-t-lg"></div>
+            </div>
+            <div class="absolute bottom-14 left-5 text-4xl sm:text-5xl animate-sway">🌳</div>
+            <div class="absolute bottom-12 left-16 text-2xl sm:text-3xl animate-bounce">🌷</div>
+            <div class="absolute bottom-8 left-28 text-2xl">🌻</div>
+            <div class="absolute bottom-14 right-5 text-4xl sm:text-5xl animate-sway" style="animation-delay: 0.8s;">🌳</div>
+            <div class="absolute bottom-12 right-16 text-2xl sm:text-3xl animate-bounce" style="animation-delay: 0.4s;">🌹</div>
+            <div class="absolute bottom-8 right-28 text-2xl">🌸</div>
+        </div>
+
+        <header class="relative z-20 pt-3 px-3 sm:px-6 pr-16 flex flex-wrap items-center justify-between gap-2">
+            <div class="flex items-center gap-2">
+                <button onclick="goBackToCoupleLifeFromQuiz()"
+                    class="px-3.5 py-2 rounded-2xl bg-white/90 hover:bg-white border-2 border-rose-300 text-rose-700 font-bold text-xs sm:text-sm shadow-md flex items-center gap-1.5 transition active:scale-95 cursor-pointer">
+                    <span>💑</span>
+                    <span>Sinh Hoạt</span>
+                </button>
+                <button onclick="goToTitleScreen()"
+                    class="px-3 py-2 rounded-2xl bg-white/90 hover:bg-white border-2 border-amber-300 text-amber-800 font-bold text-xs sm:text-sm shadow-md flex items-center gap-1 transition active:scale-95 cursor-pointer">
+                    <span>🏠</span>
+                    <span class="hidden sm:inline">Trang chủ</span>
+                </button>
+            </div>
+
+            <div class="flex items-center gap-2 sm:gap-3">
+                <div class="px-3.5 py-1.5 rounded-2xl bg-white/90 border-2 border-fuchsia-300 shadow-md flex items-center gap-1.5">
+                    <span class="text-lg">📝</span>
+                    <div>
+                        <div class="text-[10px] font-bold text-fuchsia-600 uppercase leading-none">Câu Hỏi</div>
+                        <div id="quiz-progress-text" class="text-sm sm:text-base font-extrabold text-fuchsia-700 leading-tight">1/10</div>
+                    </div>
+                </div>
+
+                <div class="px-3.5 py-1.5 rounded-2xl bg-white/90 border-2 border-rose-300 shadow-md flex items-center gap-1.5">
+                    <span class="text-lg">💖</span>
+                    <div>
+                        <div class="text-[10px] font-bold text-rose-500 uppercase leading-none">Điểm Yêu</div>
+                        <div id="quiz-score-text" class="text-sm sm:text-base font-extrabold text-rose-600 leading-tight">0</div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="relative z-20 flex-1 flex items-center justify-center px-3 sm:px-6 py-3">
+            <div id="quiz-card-box" class="w-full max-w-2xl bg-white/95 backdrop-blur-md rounded-3xl p-5 sm:p-7 border-4 border-rose-300 shadow-2xl animate-pop-in">
+                <div class="flex items-center justify-between gap-2 mb-3">
+                    <span class="inline-block px-3 py-1 rounded-full bg-rose-100 text-rose-600 text-xs font-extrabold uppercase">
+                        💕 Trắc Nghiệm Hiểu Ý Nhau 💕
+                    </span>
+                    <span id="quiz-tag-badge" class="text-xs font-bold text-amber-600 bg-amber-50 px-2.5 py-1 rounded-full border border-amber-200">
+                        +20 điểm / -10 sai
+                    </span>
+                </div>
+
+                <h2 id="quiz-question-text" class="text-lg sm:text-2xl font-extrabold text-rose-900 leading-snug mb-5">
+                    Câu hỏi trắc nghiệm tình yêu sẽ hiện tại đây...
+                </h2>
+
+                <div id="quiz-options-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
+
+                <div id="quiz-feedback-bar" class="hidden mt-4 p-3.5 rounded-2xl bg-rose-50 border-2 border-rose-200 flex flex-col sm:flex-row items-center justify-between gap-3">
+                    <p id="quiz-feedback-text" class="text-xs sm:text-sm font-bold text-rose-800 text-center sm:text-left"></p>
+                    <button id="btn-quiz-next" onclick="nextLoveQuizQuestion()"
+                        class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-rose-500 to-pink-500 hover:brightness-105 text-white font-extrabold text-xs sm:text-sm shadow-md shrink-0 cursor-pointer transition active:scale-95">
+                        Câu tiếp theo ➡️
+                    </button>
+                </div>
+
+                <div id="quiz-summary-box" class="hidden text-center py-2">
+                    <div class="text-5xl mb-2 animate-bounce">🏆💖</div>
+                    <h3 class="text-xl sm:text-2xl font-extrabold text-rose-600 mb-1">chúc mừng tyeu đã hoàn thành hết bài trắc nghiệm</h3>
+                    <p id="quiz-summary-desc" class="text-sm sm:text-base font-bold text-rose-900 bg-rose-50 rounded-2xl p-4 border border-rose-200 my-4"></p>
+                    <div class="flex flex-col sm:flex-row gap-2.5 justify-center">
+                        <button onclick="restartLoveQuiz()"
+                            class="px-5 py-3 rounded-2xl bg-gradient-to-r from-amber-400 to-orange-500 text-white font-extrabold text-sm shadow-md hover:brightness-105 cursor-pointer transition active:scale-95">
+                            🔄 Chơi lại từ đầu
+                        </button>
+                        <button onclick="goToFinalEndingScreen()"
+                            class="px-6 py-3 rounded-2xl bg-gradient-to-r from-rose-500 via-pink-500 to-amber-500 text-white font-extrabold text-sm shadow-lg hover:brightness-105 cursor-pointer transition active:scale-95">
+                            Tiếp tục ➡️
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="relative z-20 pb-3 px-4 text-center">
+            <span class="inline-block px-4 py-1.5 rounded-full bg-white/80 text-rose-600 text-xs font-bold shadow-xs">
+                Chọn một trong 4 đáp án A, B, C, D để khám phá độ ăn ý của hai bạn nhé! 💘
+            </span>
+        </footer>
+    </div>
+
+    <!-- ====================================================================== -->
+    <!-- MÀN HÌNH 6: TRANG CUỐI                                               -->
+    <!-- ====================================================================== -->
+    <div id="screen-final-ending" class="hidden relative w-full h-full flex flex-col items-center justify-between bg-gradient-to-b from-rose-900 via-pink-800 to-amber-900 text-white overflow-hidden px-4 py-4 sm:py-6">
+        <div class="pointer-events-none absolute inset-0 overflow-hidden">
+            <div class="absolute top-10 left-10 text-4xl opacity-60 animate-float">💖</div>
+            <div class="absolute top-20 right-12 text-5xl opacity-55 animate-float" style="animation-delay: 0.8s;">✨</div>
+            <div class="absolute bottom-24 left-12 text-4xl opacity-55 animate-twinkle">💕</div>
+            <div class="absolute bottom-28 right-10 text-4xl opacity-60 animate-twinkle" style="animation-delay: 0.5s;">🌸</div>
+        </div>
+
+        <header class="relative z-20 w-full max-w-3xl flex items-center justify-between">
+            <button onclick="goBackToQuizFromEnding()"
+                class="px-3.5 py-2 rounded-2xl bg-white/15 hover:bg-white/25 backdrop-blur-md border border-white/30 text-white font-bold text-xs sm:text-sm shadow-md flex items-center gap-1.5 transition active:scale-95 cursor-pointer">
+                <span>⬅️ Trắc Nghiệm</span>
+            </button>
+
+            <button onclick="goToTitleFromEnding()"
+                class="px-3.5 py-2 rounded-2xl bg-white/15 hover:bg-white/25 backdrop-blur-md border border-white/30 text-white font-bold text-xs sm:text-sm shadow-md flex items-center gap-1.5 transition active:scale-95 cursor-pointer">
+                <span>🏠 Trang Đầu</span>
+            </button>
+        </header>
+
+        <main class="relative z-20 w-full max-w-xl bg-white/95 text-rose-950 rounded-3xl p-5 sm:p-7 border-4 border-amber-300 shadow-2xl text-center animate-pop-in my-auto">
+            <div class="inline-block px-4 py-1 rounded-full bg-gradient-to-r from-rose-500 to-pink-500 text-white text-xs sm:text-sm font-extrabold uppercase tracking-wider shadow-sm mb-2">
+                ”HOÀN THÀNH TRÒ CHƠI”
+            </div>
+
+            <div class="relative mx-auto my-2 w-full max-w-md rounded-3xl bg-gradient-to-b from-sky-100 via-rose-50 to-amber-100 border-2 border-rose-200 p-3 overflow-hidden shadow-inner">
+                <div class="relative flex flex-col items-center justify-center py-2">
+                    <div class="relative w-56 h-36 sm:w-64 sm:h-40 flex items-center justify-center">
+                        <svg class="absolute inset-0 w-full h-full overflow-visible pointer-events-none" viewBox="0 0 192 156" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M 180 62 C 180 28, 122 10, 96 42 C 70 10, 12 28, 12 62 C 12 104, 96 144, 96 144 C 96 144, 180 104, 180 62 Z"
+                                stroke="#fda4af" stroke-width="2" stroke-dasharray="4 4" fill="rgba(255, 228, 230, 0.25)"/>
+                            <path class="heart-trail-path" d="M 180 62 C 180 28, 122 10, 96 42 C 70 10, 12 28, 12 62 C 12 104, 96 144, 96 144 C 96 144, 180 104, 180 62 Z"
+                                stroke="#f43f5e" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+                            <g class="plane-heart-flyer">
+                                <text x="0" y="0" font-size="18" text-anchor="middle" dominant-baseline="central">✈️</text>
+                            </g>
+                        </svg>
+
+                        <div class="relative z-10 px-3 text-center">
+                            <div id="ending-love-banner" class="text-sm sm:text-lg font-extrabold tracking-wide text-rose-600 drop-shadow-[0_2px_4px_rgba(255,255,255,0.95)] leading-snug">
+                                KHÁNH VY YÊU NGỌC TRÂN
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="animate-chibi-walk -mt-2">
+                        <svg class="w-44 h-36 sm:w-52 sm:h-40 drop-shadow-md" viewBox="0 0 340 250" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <ellipse cx="115" cy="232" rx="44" ry="9" fill="rgba(67, 40, 24, 0.25)"/>
+                            <ellipse cx="225" cy="232" rx="44" ry="9" fill="rgba(67, 40, 24, 0.25)"/>
+                            <g>
+                                <rect x="92" y="182" width="15" height="32" rx="7.5" fill="#ffedd8" stroke="#4a2c2a" stroke-width="3.5"/>
+                                <rect x="122" y="182" width="15" height="32" rx="7.5" fill="#ffedd8" stroke="#4a2c2a" stroke-width="3.5"/>
+                                <path d="M84 212 C84 203, 111 203, 111 214 L111 222 L84 222 Z" fill="#ffffff" stroke="#4a2c2a" stroke-width="3.5"/>
+                                <path d="M118 212 C118 203, 145 203, 145 214 L145 222 L118 222 Z" fill="#ffffff" stroke="#4a2c2a" stroke-width="3.5"/>
+                                <path d="M86 156 L144 156 L148 190 L118 190 L115 176 L112 190 L82 190 Z" fill="#577590" stroke="#4a2c2a" stroke-width="3.5"/>
+                                <path d="M84 114 C84 107, 146 107, 146 114 L152 158 L78 158 Z" fill="#ffffff" stroke="#4a2c2a" stroke-width="3.5"/>
+                                <circle cx="115" cy="68" r="42" fill="#ffedd8" stroke="#4a2c2a" stroke-width="3.5"/>
+                                <path d="M70 68 C66 32, 94 14, 122 17 C146 14, 166 36, 160 70 C152 54, 142 50, 132 58 C122 46, 108 46, 98 60 C86 50, 76 54, 70 68 Z" fill="#6f4e37" stroke="#4a2c2a" stroke-width="3.5"/>
+                                <path d="M94 70 Q100 63 106 70" stroke="#4a2c2a" stroke-width="3.2" stroke-linecap="round" fill="none"/>
+                                <circle cx="130" cy="69" r="5" fill="#4a2c2a"/>
+                                <ellipse cx="89" cy="79" rx="6.5" ry="3.8" fill="#ff8fa3" opacity="0.7"/>
+                                <ellipse cx="141" cy="79" rx="6.5" ry="3.8" fill="#ff8fa3" opacity="0.7"/>
+                                <path d="M106 81 Q115 94 124 81 Z" fill="#ff758f" stroke="#4a2c2a" stroke-width="2.8"/>
+                            </g>
+                            <g>
+                                <path d="M182 70 C172 106, 175 138, 192 146 L258 146 C275 138, 278 106, 268 70 Z" fill="#6f4e37" stroke="#4a2c2a" stroke-width="3.5"/>
+                                <rect x="204" y="184" width="14" height="30" rx="7" fill="#ffedd8" stroke="#4a2c2a" stroke-width="3.5"/>
+                                <rect x="232" y="184" width="14" height="30" rx="7" fill="#ffedd8" stroke="#4a2c2a" stroke-width="3.5"/>
+                                <path d="M196 212 C196 203, 222 203, 222 214 L222 222 L196 222 Z" fill="#ffb703" stroke="#4a2c2a" stroke-width="3.5"/>
+                                <path d="M228 212 C228 203, 254 203, 254 214 L254 222 L228 222 Z" fill="#ffb703" stroke="#4a2c2a" stroke-width="3.5"/>
+                                <path d="M194 115 L256 115 L262 154 L188 154 Z" fill="#ffffff" stroke="#4a2c2a" stroke-width="3.5"/>
+                                <path d="M198 115 L206 115 L206 132 L244 132 L244 115 L252 115 L266 186 L184 186 Z" fill="#ffd166" stroke="#4a2c2a" stroke-width="3.5"/>
+                                <circle cx="225" cy="70" r="40" fill="#ffedd8" stroke="#4a2c2a" stroke-width="3.5"/>
+                                <path d="M185 68 C186 38, 264 38, 265 68 C254 55, 240 55, 233 62 C225 53, 215 53, 207 62 C198 55, 190 57, 185 68 Z" fill="#6f4e37" stroke="#4a2c2a" stroke-width="3.5"/>
+                                <ellipse cx="225" cy="40" rx="54" ry="13" fill="#ffe169" stroke="#4a2c2a" stroke-width="3.5"/>
+                                <path d="M190 38 C190 8, 260 8, 260 38 Z" fill="#ffd166" stroke="#4a2c2a" stroke-width="3.5"/>
+                                <path d="M202 71 Q208 63 214 71" stroke="#4a2c2a" stroke-width="3.2" stroke-linecap="round" fill="none"/>
+                                <path d="M236 71 Q242 63 248 71" stroke="#4a2c2a" stroke-width="3.2" stroke-linecap="round" fill="none"/>
+                                <ellipse cx="199" cy="79" rx="6.5" ry="3.8" fill="#ff8fa3" opacity="0.75"/>
+                                <ellipse cx="251" cy="79" rx="6.5" ry="3.8" fill="#ff8fa3" opacity="0.75"/>
+                                <path d="M216 81 Q225 94 234 81 Z" fill="#ff758f" stroke="#4a2c2a" stroke-width="2.8"/>
+                            </g>
+                            <g>
+                                <path d="M144 136 Q170 152 194 136" stroke="#4a2c2a" stroke-width="13" stroke-linecap="round" fill="none"/>
+                                <path d="M144 136 Q170 152 194 136" stroke="#ffedd8" stroke-width="7.5" stroke-linecap="round" fill="none"/>
+                                <circle cx="170" cy="145" r="8" fill="#ffedd8" stroke="#4a2c2a" stroke-width="3.2"/>
+                                <text x="170" y="124" font-size="18" text-anchor="middle">💕</text>
+                            </g>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-3 gap-2 sm:gap-3 mb-4">
+                <div class="bg-amber-50 border-2 border-amber-200 rounded-2xl p-2">
+                    <div class="text-[10px] font-extrabold text-amber-600 uppercase">Vườn Hoa</div>
+                    <div id="ending-garden-love" class="text-base sm:text-lg font-extrabold text-amber-700">0</div>
+                </div>
+                <div class="bg-pink-50 border-2 border-pink-200 rounded-2xl p-2">
+                    <div class="text-[10px] font-extrabold text-pink-600 uppercase">Gắn Kết</div>
+                    <div id="ending-baby-bond" class="text-base sm:text-lg font-extrabold text-pink-700">0</div>
+                </div>
+                <div class="bg-rose-50 border-2 border-rose-200 rounded-2xl p-2">
+                    <div class="text-[10px] font-extrabold text-rose-600 uppercase">Điểm Trắc Nghiệm</div>
+                    <div id="ending-quiz-score" class="text-base sm:text-lg font-extrabold text-rose-700">0</div>
+                </div>
+            </div>
+
+            <button onclick="replayWholeLoveGame()"
+                class="w-full py-3 rounded-2xl bg-gradient-to-r from-amber-400 via-orange-400 to-rose-500 hover:brightness-105 text-white font-extrabold text-base shadow-lg transition active:scale-95 cursor-pointer">
+                ✨ Chơi Lại Từ Đầu ✨
+            </button>
+        </main>
+
+        <footer class="relative z-20 text-center text-xs sm:text-sm font-bold text-rose-100/90">
+            💕 KHÁNH VY YÊU NGỌC TRÂN • ”HOÀN THÀNH TRÒ CHƠI” 💕
+        </footer>
+    </div>
+
+    <!-- ====================================================================== -->
+    <!-- CÁC MODAL                                                              -->
+    <!-- ====================================================================== -->
+    <div id="modal-flower-card" class="hidden fixed inset-0 z-50 bg-rose-950/45 backdrop-blur-xs flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-md rounded-3xl p-6 text-center border-4 border-rose-300 shadow-2xl animate-pop-in">
+            <div class="inline-block px-3 py-1 rounded-full bg-rose-100 text-rose-600 text-xs font-extrabold uppercase mb-2">
+                🌸 Mở Khóa Thông Điệp Loài Hoa 🌸
+            </div>
+            <div id="fc-emoji" class="text-6xl my-2 animate-bounce">🌹</div>
+            <h3 id="fc-name" class="text-2xl font-extrabold text-rose-600 mb-1">Hoa Hồng Đỏ</h3>
+            <div id="fc-meaning" class="text-xs font-bold text-amber-600 uppercase tracking-wider mb-3">Tình yêu nồng cháy</div>
+            <div class="bg-rose-50 rounded-2xl p-4 border border-rose-200 mb-5">
+                <p id="fc-message" class="text-rose-900 font-semibold text-sm sm:text-base leading-relaxed"></p>
+            </div>
+            <button onclick="closeFlowerCardModal()"
+                class="w-full py-3 rounded-2xl bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 text-white font-bold text-base shadow-lg transition active:scale-95 cursor-pointer">
+                Lưu vào Bộ Sưu Tập 💕
+            </button>
+        </div>
+    </div>
+
+    <div id="modal-cards-list" class="hidden fixed inset-0 z-50 bg-rose-950/45 backdrop-blur-xs flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-lg rounded-3xl p-6 max-h-[85vh] flex flex-col border-4 border-pink-200 shadow-2xl animate-pop-in">
+            <div class="flex items-center justify-between pb-3 mb-3 border-b border-rose-100">
+                <h3 class="text-xl font-extrabold text-rose-600 flex items-center gap-2">
+                    <span>💌</span>
+                    <span>Sổ Tay Thông Điệp Hoa</span>
+                </h3>
+                <button onclick="closeCardsModal()" class="w-8 h-8 rounded-full bg-rose-100 text-rose-600 font-bold hover:bg-rose-200 cursor-pointer">✕</button>
+            </div>
+            <div id="cards-list-container" class="overflow-y-auto space-y-2.5 flex-1 pr-1"></div>
+        </div>
+    </div>
+
+    <div id="modal-bouquet" class="hidden fixed inset-0 z-50 bg-rose-950/50 backdrop-blur-xs flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-md rounded-3xl p-6 text-center border-4 border-amber-300 shadow-2xl animate-pop-in">
+            <div class="flex items-center justify-between mb-2">
+                <span class="text-xs font-extrabold uppercase px-3 py-1 rounded-full bg-amber-100 text-amber-700">💐 Gói Quà Yêu Thương</span>
+                <button onclick="closeBouquetModal()" class="w-8 h-8 rounded-full bg-gray-100 text-gray-600 font-bold hover:bg-gray-200 cursor-pointer">✕</button>
+            </div>
+            <h3 class="text-2xl font-extrabold text-rose-600 mb-1">Kết Bó Hoa Tặng Người Ấy</h3>
+            <p class="text-xs sm:text-sm text-gray-600 mb-4">Cần ít nhất <b>3 bông hoa</b> đã thu hoạch để gói thành bó hoa rực rỡ!</p>
+            <div id="bouquet-inventory" class="flex flex-wrap items-center justify-center gap-2 bg-rose-50 rounded-2xl p-3 border border-rose-200 min-h-[64px] mb-4"></div>
+            <div class="space-y-2.5 text-left mb-5">
+                <div>
+                    <label class="block text-xs font-bold text-rose-600 mb-1">Gửi tặng người thương:</label>
+                    <input type="text" id="bouquet-recipient" placeholder="Ví dụ: Em bé của anh..." maxlength="25"
+                        class="w-full px-3.5 py-2 rounded-xl border-2 border-rose-200 focus:border-rose-400 focus:outline-none text-sm font-bold text-rose-900">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-rose-600 mb-1">Lời nhắn ngọt ngào đính kèm:</label>
+                    <textarea id="bouquet-note" rows="2" maxlength="120" placeholder="Chúc cậu một ngày thật vui vẻ và luôn mỉm cười nhé! Yêu cậu nhiều 💖"
+                        class="w-full px-3.5 py-2 rounded-xl border-2 border-rose-200 focus:border-rose-400 focus:outline-none text-sm font-medium text-rose-900"></textarea>
+                </div>
+            </div>
+            <button id="btn-wrap-bouquet" onclick="createAndSendBouquet()"
+                class="w-full py-3 rounded-2xl bg-gradient-to-r from-amber-400 via-orange-400 to-rose-500 hover:brightness-105 text-white font-extrabold text-base shadow-lg transition active:scale-95 cursor-pointer">
+                Gói Bó Hoa & Gửi Tặng ✨
+            </button>
+        </div>
+    </div>
+
+    <div id="modal-gift-card" class="hidden fixed inset-0 z-50 bg-rose-950/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-md rounded-3xl p-6 sm:p-7 text-center border-4 border-rose-400 shadow-2xl animate-pop-in">
+            <div class="text-xs font-extrabold uppercase tracking-widest text-rose-500 mb-2">✨ Món Quà Từ Trái Tim ✨</div>
+            <div class="relative inline-flex flex-col items-center justify-center my-2">
+                <div id="gift-flowers-cluster" class="text-4xl sm:text-5xl tracking-tight leading-none drop-shadow-md">🌹🌻🌷</div>
+                <div class="text-5xl -mt-2">💐</div>
+            </div>
+            <h3 class="text-xl sm:text-2xl font-extrabold text-rose-600 mt-1">
+                Thân gửi: <span id="gift-to-name" class="text-amber-600">Người ấy</span>
+            </h3>
+            <div class="bg-rose-50/90 rounded-2xl p-4 my-4 border-2 border-dashed border-rose-300 shadow-inner">
+                <p id="gift-message-display" class="text-rose-900 font-bold text-sm sm:text-base italic leading-relaxed"></p>
+            </div>
+            <div class="text-xs font-bold text-emerald-600 mb-4">+100 Điểm Tình Yêu & +30 Xu Thưởng! 🎉</div>
+            <button onclick="closeGiftCardModal()"
+                class="w-full py-3 rounded-2xl bg-gradient-to-r from-rose-500 to-pink-500 text-white font-bold text-base shadow-md hover:brightness-105 transition active:scale-95 cursor-pointer">
+                Tiếp tục chăm sóc vườn hoa 🌱
+            </button>
+        </div>
+    </div>
+
+    <div id="modal-rename-baby" class="hidden fixed inset-0 z-50 bg-rose-950/45 backdrop-blur-xs flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-sm rounded-3xl p-6 text-center border-4 border-pink-300 shadow-2xl animate-pop-in">
+            <div class="text-4xl mb-2">👶💖</div>
+            <h3 class="text-xl font-extrabold text-rose-600 mb-1">Đặt Tên Cho Thiên Thần Nhỏ</h3>
+            <p class="text-xs text-gray-500 mb-4">Hãy đặt một cái tên thật đáng yêu cho bé nhé!</p>
+            <input type="text" id="input-baby-name" maxlength="18" placeholder="Ví dụ: Bé Bông..."
+                class="w-full px-4 py-2.5 rounded-2xl border-2 border-pink-200 focus:border-rose-400 focus:outline-none text-center font-extrabold text-rose-700 mb-4">
+            <div class="flex gap-2">
+                <button onclick="closeRenameBabyModal()" class="flex-1 py-2.5 rounded-xl bg-gray-100 text-gray-600 font-bold cursor-pointer">Hủy</button>
+                <button onclick="saveBabyName()" class="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-rose-500 to-pink-500 text-white font-bold shadow-md cursor-pointer">Lưu Tên</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-family-milestones" class="hidden fixed inset-0 z-50 bg-rose-950/45 backdrop-blur-xs flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-md rounded-3xl p-6 max-h-[85vh] flex flex-col border-4 border-amber-300 shadow-2xl animate-pop-in">
+            <div class="flex items-center justify-between pb-3 mb-3 border-b border-amber-100">
+                <h3 class="text-lg sm:text-xl font-extrabold text-amber-700 flex items-center gap-2">
+                    <span>🏆</span>
+                    <span>Cột Mốc Tổ Ấm Hạnh Phúc</span>
+                </h3>
+                <button onclick="closeFamilyMilestonesModal()" class="w-8 h-8 rounded-full bg-amber-100 text-amber-700 font-bold hover:bg-amber-200 cursor-pointer">✕</button>
+            </div>
+            <div id="family-milestones-list" class="overflow-y-auto space-y-2.5 flex-1 pr-1"></div>
+        </div>
+    </div>
+
+    <div id="modal-rename-couple" class="hidden fixed inset-0 z-50 bg-rose-950/45 backdrop-blur-xs flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-sm rounded-3xl p-6 text-center border-4 border-pink-300 shadow-2xl animate-pop-in">
+            <div class="text-4xl mb-2">💑✏️</div>
+            <h3 class="text-xl font-extrabold text-rose-600 mb-1">Đổi Tên Cho Hai Nhân Vật</h3>
+            <p class="text-xs text-gray-500 mb-4">Nhập tên của bạn áo trắng và bạn áo vàng nhé!</p>
+            <div class="space-y-2.5 text-left mb-4">
+                <div>
+                    <label class="block text-xs font-bold text-sky-700 mb-1">Tên nhân vật áo trắng:</label>
+                    <input type="text" id="input-couple-boy-name" maxlength="16" placeholder="Ví dụ: Ox, Anh..."
+                        class="w-full px-3.5 py-2 rounded-xl border-2 border-sky-200 focus:border-sky-400 focus:outline-none text-sm font-extrabold text-slate-800">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-amber-700 mb-1">Tên nhân vật áo vàng:</label>
+                    <input type="text" id="input-couple-girl-name" maxlength="16" placeholder="Ví dụ: Vo, Em..."
+                        class="w-full px-3.5 py-2 rounded-xl border-2 border-amber-200 focus:border-amber-400 focus:outline-none text-sm font-extrabold text-amber-900">
+                </div>
+            </div>
+            <div class="flex gap-2">
+                <button onclick="closeRenameCoupleModal()" class="flex-1 py-2.5 rounded-xl bg-gray-100 text-gray-600 font-bold cursor-pointer">Hủy</button>
+                <button onclick="saveCoupleNames()" class="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-rose-500 to-pink-500 text-white font-bold shadow-md cursor-pointer">Lưu Tên</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="fx-layer" class="fixed inset-0 pointer-events-none z-50 overflow-hidden"></div>
+
+    <script>
+        /* ======================================================================
+           1. ÂM THANH WEB AUDIO API
+           ====================================================================== */
+        let audioCtx = null;
+        let soundEnabled = true;
+        let bgmInterval = null;
+
+        function initAudio() {
+            if (!audioCtx) {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                audioCtx = new AudioContext();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        }
+
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            document.getElementById('sound-icon').textContent = soundEnabled ? '🔊' : '🔇';
+            if (soundEnabled) {
+                initAudio();
+                startChillBGM();
+                playNote(659.25, 'sine', 0.12, 0.1);
+            } else {
+                stopChillBGM();
+            }
+        }
+
+        function playNote(freq, type = 'sine', duration = 0.18, vol = 0.12, delay = 0) {
+            if (!soundEnabled) return;
+            try {
+                initAudio();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime + delay);
+                gain.gain.setValueAtTime(vol, audioCtx.currentTime + delay);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + delay + duration);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start(audioCtx.currentTime + delay);
+                osc.stop(audioCtx.currentTime + delay + duration);
+            } catch (e) {}
+        }
+
+        function startChillBGM() {
+            if (bgmInterval || !soundEnabled) return;
+            const melody = [523.25, 659.25, 783.99, 659.25, 587.33, 698.46, 880.00, 698.46];
+            let step = 0;
+            bgmInterval = setInterval(() => {
+                if (!soundEnabled) return;
+                playNote(melody[step % melody.length], 'sine', 0.45, 0.035, 0);
+                step++;
+            }, 650);
+        }
+
+        function stopChillBGM() {
+            if (bgmInterval) {
+                clearInterval(bgmInterval);
+                bgmInterval = null;
+            }
+        }
+
+        const GardenSFX = {
+            startClick: () => {
+                playNote(523.25, 'triangle', 0.12, 0.15, 0);
+                playNote(659.25, 'triangle', 0.12, 0.15, 0.07);
+                playNote(783.99, 'triangle', 0.25, 0.18, 0.14);
+            },
+            plantSeed: () => {
+                playNote(330, 'sine', 0.1, 0.14, 0);
+                playNote(440, 'sine', 0.12, 0.14, 0.06);
+            },
+            water: () => {
+                playNote(587.33, 'sine', 0.12, 0.12, 0);
+                playNote(783.99, 'sine', 0.14, 0.12, 0.06);
+                playNote(987.77, 'sine', 0.16, 0.12, 0.12);
+            },
+            fertilizer: () => {
+                playNote(523.25, 'triangle', 0.1, 0.15, 0);
+                playNote(783.99, 'triangle', 0.1, 0.15, 0.06);
+                playNote(1046.50, 'triangle', 0.22, 0.16, 0.12);
+            },
+            bloom: () => {
+                playNote(659.25, 'sine', 0.18, 0.12, 0);
+                playNote(880.00, 'sine', 0.25, 0.12, 0.09);
+            },
+            harvest: () => {
+                [523.25, 659.25, 783.99, 1046.50].forEach((n, i) => playNote(n, 'triangle', 0.2, 0.16, i * 0.06));
+            },
+            bouquetCelebrate: () => {
+                [523.25, 659.25, 783.99, 1046.50, 1318.51, 1567.98].forEach((n, i) => playNote(n, 'triangle', 0.3, 0.18, i * 0.08));
+            },
+            babyGiggle: () => {
+                [783.99, 987.77, 880.00, 1046.50, 987.77, 1174.66].forEach((n, i) => playNote(n, 'sine', 0.12, 0.16, i * 0.07));
+            },
+            babyEat: () => {
+                playNote(440, 'triangle', 0.1, 0.14, 0);
+                playNote(554.37, 'triangle', 0.1, 0.14, 0.08);
+                playNote(659.25, 'triangle', 0.18, 0.16, 0.16);
+            },
+            babyDrink: () => {
+                playNote(392.00, 'sine', 0.14, 0.14, 0);
+                playNote(523.25, 'sine', 0.14, 0.14, 0.1);
+                playNote(659.25, 'sine', 0.2, 0.14, 0.2);
+            },
+            lullabySong: () => {
+                const lullaby = [
+                    { f: 523.25, t: 0 }, { f: 523.25, t: 0.35 },
+                    { f: 783.99, t: 0.7 }, { f: 783.99, t: 1.05 },
+                    { f: 880.00, t: 1.4 }, { f: 880.00, t: 1.75 },
+                    { f: 783.99, t: 2.1 }
+                ];
+                lullaby.forEach(n => playNote(n.f, 'sine', 0.45, 0.12, n.t));
+            },
+            error: () => {
+                playNote(200, 'sawtooth', 0.15, 0.1, 0);
+            }
+        };
+
+        /* ======================================================================
+           2. TRỒNG HOA TÌNH YÊU
+           ====================================================================== */
+        const FLOWER_TYPES = [
+            {
+                id: 'rose',
+                name: 'Hoa Hồng Đỏ',
+                emoji: '🌹',
+                seedCost: 0,
+                unlockCost: 0,
+                growTime: 10,
+                rewardCoins: 15,
+                rewardLove: 20,
+                meaning: 'Tình yêu nồng cháy & lãng mạn',
+                message: '“Giữa muôn ngàn đóa hoa ngoài kia, cậu vẫn là bông hồng rực rỡ và duy nhất trong trái tim tớ.”'
+            },
+            {
+                id: 'sunflower',
+                name: 'Hướng Dương',
+                emoji: '🌻',
+                seedCost: 10,
+                unlockCost: 0,
+                growTime: 12,
+                rewardCoins: 25,
+                rewardLove: 30,
+                meaning: 'Luôn hướng về phía nhau',
+                message: '“Như hoa hướng dương luôn hướng về mặt trời, ánh mắt tớ lúc nào cũng chỉ tìm kiếm nụ cười của cậu.”'
+            },
+            {
+                id: 'tulip',
+                name: 'Tulip Hồng',
+                emoji: '🌷',
+                seedCost: 15,
+                unlockCost: 40,
+                growTime: 14,
+                rewardCoins: 35,
+                rewardLove: 45,
+                meaning: 'Sự quan tâm ngọt ngào',
+                message: '“Cảm ơn cậu đã đến và tô điểm cho những ngày bình thường của tớ trở nên thật dịu dàng.”'
+            },
+            {
+                id: 'lavender',
+                name: 'Oải Hương',
+                emoji: '🪻',
+                seedCost: 20,
+                unlockCost: 80,
+                growTime: 16,
+                rewardCoins: 50,
+                rewardLove: 65,
+                meaning: 'Lời hứa thủy chung bền lâu',
+                message: '“Dù thời gian có trôi qua bao lâu, tình cảm này vẫn luôn nhẹ nhàng, bình yên và trọn vẹn như ngày đầu.”'
+            },
+            {
+                id: 'gold_heart_flower',
+                name: 'Hoa Tim Vàng',
+                emoji: '🌺',
+                seedCost: 30,
+                unlockCost: 140,
+                growTime: 18,
+                rewardCoins: 80,
+                rewardLove: 100,
+                meaning: 'Chân ái định mệnh',
+                message: '“Gặp được cậu là điều may mắn tuyệt vời nhất của cuộc đời tớ. Trái tim này mãi thuộc về cậu!”'
+            }
+        ];
+
+        let coins = 50;
+        let lovePoints = 0;
+        let selectedTool = 'seed_rose';
+        let unlockedSeeds = ['rose', 'sunflower'];
+        let unlockedCards = [];
+        let harvestedFlowers = [];
+        let plots = Array.from({ length: 6 }, (_, i) => ({
+            id: i,
+            flowerId: null,
+            stage: 0,
+            progress: 0,
+            needsWater: false,
+            wateredCount: 0
+        }));
+        let gardenLoopTimer = null;
+
+        function goToGardenScreen() {
+            initAudio();
+            GardenSFX.startClick();
+            startChillBGM();
+            const titleScreen = document.getElementById('screen-title');
+            const gardenScreen = document.getElementById('screen-garden');
+            titleScreen.classList.add('opacity-0');
+            setTimeout(() => {
+                titleScreen.classList.add('hidden');
+                gardenScreen.classList.remove('hidden');
+                renderSeedToolbar();
+                renderGardenGrid();
+                updateGardenHUD();
+                startGardenLoop();
+            }, 350);
+        }
+
+        function goToTitleScreen() {
+            GardenSFX.plantSeed();
+            const titleScreen = document.getElementById('screen-title');
+            const gardenScreen = document.getElementById('screen-garden');
+            gardenScreen.classList.add('hidden');
+            titleScreen.classList.remove('hidden');
+            setTimeout(() => titleScreen.classList.remove('opacity-0'), 30);
+        }
+
+        function selectTool(toolName) {
+            selectedTool = toolName;
+            GardenSFX.plantSeed();
+            updateToolHighlight();
+        }
+
+        function updateToolHighlight() {
+            document.querySelectorAll('.tool-btn').forEach(btn => btn.classList.remove('tool-active'));
+            const activeBtn = document.getElementById(`tool-${selectedTool}`);
+            if (activeBtn) activeBtn.classList.add('tool-active');
+        }
+
+        function renderSeedToolbar() {
+            const container = document.getElementById('seed-toolbar');
+            container.innerHTML = '';
+
+            FLOWER_TYPES.forEach(flower => {
+                const isUnlocked = unlockedSeeds.includes(flower.id);
+                const btn = document.createElement('button');
+                btn.id = `tool-seed_${flower.id}`;
+                btn.className = `tool-btn flex flex-col items-center justify-center min-w-[60px] sm:min-w-[68px] h-16 sm:h-18 rounded-2xl border-2 transition cursor-pointer p-1 relative ${
+                    isUnlocked ? 'bg-emerald-50 border-emerald-200 text-emerald-900' : 'bg-gray-100 border-gray-300 text-gray-500'
+                }`;
+
+                if (isUnlocked) {
+                    btn.onclick = () => selectTool(`seed_${flower.id}`);
+                    btn.innerHTML = `
+                        <span class="text-xl sm:text-2xl">${flower.emoji}</span>
+                        <span class="text-[10px] font-bold truncate max-w-[58px]">${flower.name.replace('Hoa ', '')}</span>
+                        <span class="text-[9px] font-extrabold text-amber-600">${flower.seedCost === 0 ? 'Miễn phí' : flower.seedCost + '🪙'}</span>
+                    `;
+                } else {
+                    btn.onclick = () => tryUnlockSeed(flower);
+                    btn.innerHTML = `
+                        <span class="text-lg">🔒</span>
+                        <span class="text-[10px] font-bold truncate max-w-[58px]">${flower.name.replace('Hoa ', '')}</span>
+                        <span class="text-[9px] font-extrabold text-rose-600">Mở ${flower.unlockCost}🪙</span>
+                    `;
+                }
+                container.appendChild(btn);
+            });
+            updateToolHighlight();
+        }
+
+        function tryUnlockSeed(flower) {
+            if (coins >= flower.unlockCost) {
+                coins -= flower.unlockCost;
+                unlockedSeeds.push(flower.id);
+                selectedTool = `seed_${flower.id}`;
+                GardenSFX.bouquetCelebrate();
+                spawnFloatingFX(window.innerWidth / 2, window.innerHeight - 100, `Đã mở khóa ${flower.name}! 🎉`, '#059669');
+                setCoupleSpeech(`“Tuyệt vời! Chúng ta đã có hạt giống ${flower.name} rồi!”`);
+                renderSeedToolbar();
+                updateGardenHUD();
+            } else {
+                GardenSFX.error();
+                spawnFloatingFX(window.innerWidth / 2, window.innerHeight - 100, `Cần ${flower.unlockCost}🪙 để mở khóa!`, '#e11d48');
+            }
+        }
+
+        function renderGardenGrid() {
+            const grid = document.getElementById('garden-grid');
+            grid.innerHTML = '';
+
+            plots.forEach(plot => {
+                const plotEl = document.createElement('div');
+                plotEl.id = `plot-${plot.id}`;
+                plotEl.onclick = (e) => handlePlotClick(plot.id, e);
+                plotEl.className = 'garden-plot relative h-28 sm:h-36 rounded-3xl flex flex-col items-center justify-center cursor-pointer select-none';
+
+                if (plot.stage === 0) {
+                    plotEl.innerHTML = `<div class="text-amber-200/40 text-xs sm:text-sm font-bold tracking-wide">+ Gieo hạt</div>`;
+                } else {
+                    const flower = FLOWER_TYPES.find(f => f.id === plot.flowerId);
+                    let visual = '🌱';
+                    let animClass = '';
+                    if (plot.stage === 2) { visual = '🌿'; animClass = 'animate-sway'; }
+                    else if (plot.stage === 3) { visual = '🌷'; animClass = 'animate-sway'; }
+                    else if (plot.stage === 4) { visual = flower.emoji; animClass = 'animate-bounce'; }
+
+                    let badgeHTML = '';
+                    if (plot.stage === 4) {
+                        badgeHTML = `<div class="absolute -top-3 bg-gradient-to-r from-rose-500 to-pink-500 text-white text-[10px] sm:text-xs font-extrabold px-2.5 py-0.5 rounded-full shadow-md animate-pulse">✨ Thu hoạch!</div>`;
+                    } else if (plot.needsWater) {
+                        badgeHTML = `<div class="absolute -top-3 bg-sky-500 text-white text-xs font-extrabold px-2.5 py-0.5 rounded-full shadow-md animate-bounce">💧 Tưới nước</div>`;
+                    }
+
+                    const progressHTML = plot.stage < 4 ? `
+                        <div class="w-4/5 h-2 bg-amber-950/60 rounded-full overflow-hidden mt-1.5 border border-amber-700/50">
+                            <div class="h-full bg-gradient-to-r from-lime-400 to-emerald-400 transition-all duration-300" style="width: ${Math.min(100, plot.progress)}%"></div>
+                        </div>
+                    ` : `<div class="text-[11px] font-extrabold text-amber-200 mt-1">${flower.name}</div>`;
+
+                    plotEl.innerHTML = `${badgeHTML}<div class="text-4xl sm:text-5xl ${animClass} drop-shadow-md">${visual}</div>${progressHTML}`;
+                }
+                grid.appendChild(plotEl);
+            });
+        }
+
+        function handlePlotClick(plotId, event) {
+            const plot = plots[plotId];
+            const rect = event.currentTarget.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+
+            if (plot.stage === 4) {
+                harvestPlot(plot, centerX, centerY);
+                return;
+            }
+
+            if (selectedTool.startsWith('seed_')) {
+                const seedId = selectedTool.replace('seed_', '');
+                const flower = FLOWER_TYPES.find(f => f.id === seedId);
+
+                if (plot.stage !== 0) {
+                    if (plot.needsWater) waterPlot(plot, centerX, centerY);
+                    else {
+                        GardenSFX.error();
+                        spawnFloatingFX(centerX, centerY, 'Ô đất đang có cây!', '#f59e0b');
+                    }
+                    return;
+                }
+
+                if (coins < flower.seedCost) {
+                    GardenSFX.error();
+                    spawnFloatingFX(centerX, centerY, 'Không đủ Xu! 🪙', '#e11d48');
+                    return;
+                }
+
+                coins -= flower.seedCost;
+                plot.flowerId = flower.id;
+                plot.stage = 1;
+                plot.progress = 5;
+                plot.needsWater = true;
+                plot.wateredCount = 0;
+
+                GardenSFX.plantSeed();
+                spawnFloatingFX(centerX, centerY, `Gieo ${flower.name} 🌱`, '#059669');
+                setCoupleSpeech(`“Đã gieo hạt ${flower.name}! Hãy tưới nước cho mầm non nhé!”`);
+                updateGardenHUD();
+                renderGardenGrid();
+                return;
+            }
+
+            if (selectedTool === 'water') {
+                if (plot.stage === 0) {
+                    GardenSFX.error();
+                    spawnFloatingFX(centerX, centerY, 'Chưa có hạt giống!', '#0284c7');
+                    return;
+                }
+                waterPlot(plot, centerX, centerY);
+                return;
+            }
+
+            if (selectedTool === 'fertilizer') {
+                if (plot.stage === 0 || plot.stage === 4) {
+                    GardenSFX.error();
+                    spawnFloatingFX(centerX, centerY, 'Không thể bón lúc này!', '#d97706');
+                    return;
+                }
+                if (coins < 10) {
+                    GardenSFX.error();
+                    spawnFloatingFX(centerX, centerY, 'Cần 10 Xu 🪙', '#e11d48');
+                    return;
+                }
+
+                coins -= 10;
+                plot.needsWater = false;
+                plot.progress = Math.min(100, plot.progress + 45);
+                updatePlotStage(plot);
+
+                GardenSFX.fertilizer();
+                spawnHeartBurst(centerX, centerY, 8);
+                spawnFloatingFX(centerX, centerY, '+45% Lớn nhanh! ✨', '#d97706');
+                setCoupleSpeech('“Phân bón tình yêu giúp cây lớn vù vù luôn nè!”');
+                updateGardenHUD();
+                renderGardenGrid();
+                return;
+            }
+
+            if (selectedTool === 'harvest') {
+                if (plot.stage === 4) harvestPlot(plot, centerX, centerY);
+                else {
+                    GardenSFX.error();
+                    spawnFloatingFX(centerX, centerY, 'Hoa chưa nở rộ!', '#e11d48');
+                }
+            }
+        }
+
+        function waterPlot(plot, x, y) {
+            if (!plot.needsWater) {
+                GardenSFX.water();
+                plot.progress = Math.min(100, plot.progress + 8);
+                updatePlotStage(plot);
+                spawnFloatingFX(x, y, 'Mát quá! 💧', '#0284c7');
+                renderGardenGrid();
+                return;
+            }
+            plot.needsWater = false;
+            plot.wateredCount++;
+            plot.progress = Math.min(100, plot.progress + 25);
+            updatePlotStage(plot);
+            GardenSFX.water();
+            spawnFloatingFX(x, y, 'Tưới nước 💧 +25%', '#0284c7');
+            setCoupleSpeech('“Cây uống đủ nước rồi, đang lớn lên từng chút một đó!”');
+            renderGardenGrid();
+        }
+
+        function updatePlotStage(plot) {
+            const oldStage = plot.stage;
+            if (plot.progress >= 100) {
+                plot.stage = 4;
+                plot.needsWater = false;
+                if (oldStage < 4) GardenSFX.bloom();
+            } else if (plot.progress >= 65) plot.stage = 3;
+            else if (plot.progress >= 30) plot.stage = 2;
+            else plot.stage = 1;
+        }
+
+        function harvestPlot(plot, x, y) {
+            const flower = FLOWER_TYPES.find(f => f.id === plot.flowerId);
+            if (!flower) return;
+
+            coins += flower.rewardCoins;
+            lovePoints += flower.rewardLove;
+            harvestedFlowers.push(flower);
+
+            plot.flowerId = null;
+            plot.stage = 0;
+            plot.progress = 0;
+            plot.needsWater = false;
+
+            GardenSFX.harvest();
+            spawnHeartBurst(x, y, 16);
+            spawnFloatingBanner(x, y - 20, '🌸 Cảm ơn vì đã chăm hoa đẹp! 🌸');
+            setCoupleSpeech('“Cảm ơn vì đã chăm hoa đẹp! Bông hoa rực rỡ quá!”');
+
+            updateGardenHUD();
+            renderGardenGrid();
+
+            if (!unlockedCards.includes(flower.id)) {
+                unlockedCards.push(flower.id);
+                updateGardenHUD();
+                setTimeout(() => showFlowerCardModal(flower), 650);
+            }
+        }
+
+        function startGardenLoop() {
+            if (gardenLoopTimer) clearInterval(gardenLoopTimer);
+            gardenLoopTimer = setInterval(() => {
+                let changed = false;
+                plots.forEach(plot => {
+                    if (plot.stage > 0 && plot.stage < 4) {
+                        const flower = FLOWER_TYPES.find(f => f.id === plot.flowerId);
+                        const speedFactor = plot.needsWater ? 0.35 : 1.0;
+                        plot.progress = Math.min(100, plot.progress + (100 / flower.growTime) * 0.5 * speedFactor);
+                        if (plot.progress >= 50 && plot.progress < 65 && plot.wateredCount < 2 && !plot.needsWater) {
+                            plot.needsWater = true;
+                        }
+                        updatePlotStage(plot);
+                        changed = true;
+                    }
+                });
+                if (changed) renderGardenGrid();
+            }, 500);
+        }
+
+        function updateGardenHUD() {
+            const coinsEl = document.getElementById('hud-coins');
+            const loveEl = document.getElementById('hud-love-points');
+            const badgeEl = document.getElementById('hud-cards-badge');
+            const bouquetEl = document.getElementById('hud-bouquet-count');
+            if (coinsEl) coinsEl.textContent = coins;
+            if (loveEl) loveEl.textContent = lovePoints;
+            if (badgeEl) badgeEl.textContent = `${unlockedCards.length}/${FLOWER_TYPES.length}`;
+            if (bouquetEl) bouquetEl.textContent = harvestedFlowers.length;
+        }
+
+        function setCoupleSpeech(text) {
+            document.getElementById('couple-speech').textContent = text;
+        }
+
+        function showFlowerCardModal(flower) {
+            document.getElementById('fc-emoji').textContent = flower.emoji;
+            document.getElementById('fc-name').textContent = flower.name;
+            document.getElementById('fc-meaning').textContent = flower.meaning;
+            document.getElementById('fc-message').textContent = flower.message;
+            document.getElementById('modal-flower-card').classList.remove('hidden');
+        }
+
+        function closeFlowerCardModal() {
+            document.getElementById('modal-flower-card').classList.add('hidden');
+        }
+
+        function openCardsModal() {
+            const container = document.getElementById('cards-list-container');
+            container.innerHTML = '';
+            FLOWER_TYPES.forEach(flower => {
+                const isUnlocked = unlockedCards.includes(flower.id);
+                const div = document.createElement('div');
+                div.className = `p-3.5 rounded-2xl border-2 ${isUnlocked ? 'bg-rose-50 border-rose-200' : 'bg-gray-100 border-gray-200 opacity-75'}`;
+                div.innerHTML = isUnlocked ? `
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="font-extrabold text-rose-600 text-sm flex items-center gap-1.5">
+                            <span class="text-xl">${flower.emoji}</span><span>${flower.name}</span>
+                        </span>
+                        <span class="text-[11px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-700">${flower.meaning}</span>
+                    </div>
+                    <p class="text-xs sm:text-sm text-rose-900 font-semibold leading-relaxed">${flower.message}</p>
+                ` : `
+                    <div class="flex items-center justify-between">
+                        <span class="font-bold text-gray-500 text-sm flex items-center gap-1.5"><span>🔒</span><span>${flower.name}</span></span>
+                        <span class="text-xs font-bold text-gray-500">Thu hoạch hoa để mở</span>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+            document.getElementById('modal-cards-list').classList.remove('hidden');
+        }
+
+        function closeCardsModal() {
+            document.getElementById('modal-cards-list').classList.add('hidden');
+        }
+
+        function openBouquetModal() {
+            const inv = document.getElementById('bouquet-inventory');
+            const btnWrap = document.getElementById('btn-wrap-bouquet');
+            inv.innerHTML = '';
+            if (harvestedFlowers.length === 0) {
+                inv.innerHTML = `<span class="text-xs text-rose-400 font-bold">Giỏ hoa đang trống. Hãy thu hoạch thêm hoa nhé! 🌱</span>`;
+            } else {
+                harvestedFlowers.forEach(f => {
+                    const span = document.createElement('span');
+                    span.className = 'text-2xl sm:text-3xl bg-white p-1.5 rounded-xl shadow-xs border border-rose-100';
+                    span.textContent = f.emoji;
+                    span.title = f.name;
+                    inv.appendChild(span);
+                });
+            }
+            if (harvestedFlowers.length >= 3) {
+                btnWrap.disabled = false;
+                btnWrap.classList.remove('opacity-50', 'cursor-not-allowed');
+            } else {
+                btnWrap.disabled = true;
+                btnWrap.classList.add('opacity-50', 'cursor-not-allowed');
+            }
+            document.getElementById('modal-bouquet').classList.remove('hidden');
+        }
+
+        function closeBouquetModal() {
+            document.getElementById('modal-bouquet').classList.add('hidden');
+        }
+
+        function createAndSendBouquet() {
+            if (harvestedFlowers.length < 3) return;
+            const recipient = document.getElementById('bouquet-recipient').value.trim() || "Người thương của tớ";
+            const note = document.getElementById('bouquet-note').value.trim() || "Tặng cậu bó hoa tươi thắm này, mong cậu luôn hạnh phúc và mỉm cười thật nhiều nhé! 💖";
+            const clusterEmojis = harvestedFlowers.slice(0, 7).map(f => f.emoji).join('');
+
+            harvestedFlowers = [];
+            lovePoints += 100;
+            coins += 30;
+            updateGardenHUD();
+            closeBouquetModal();
+
+            document.getElementById('gift-flowers-cluster').textContent = clusterEmojis;
+            document.getElementById('gift-to-name').textContent = recipient;
+            document.getElementById('gift-message-display').textContent = `“${note}”`;
+            document.getElementById('modal-gift-card').classList.remove('hidden');
+
+            GardenSFX.bouquetCelebrate();
+            spawnHeartBurst(window.innerWidth * 0.3, window.innerHeight * 0.4, 22);
+            spawnHeartBurst(window.innerWidth * 0.7, window.innerHeight * 0.4, 22);
+        }
+
+        function closeGiftCardModal() {
+            document.getElementById('modal-gift-card').classList.add('hidden');
+        }
+
+        /* ======================================================================
+           3. CHĂM CON
+           ====================================================================== */
+        let babyState = {
+            name: 'Bé Bông',
+            hunger: 75,
+            milk: 70,
+            sleep: 80,
+            happy: 85,
+            isSleeping: false,
+            bondPoints: 0,
+            unlockedMilestones: []
+        };
+        let babyLoopTimer = null;
+
+        const FAMILY_MILESTONES = [
+            { id: 'm1', points: 50, title: 'Ba Mẹ Tập Sự Đảm Đang', icon: '🍼', desc: 'Lần đầu chăm sóc thiên thần nhỏ thật chu đáo!' },
+            { id: 'm2', points: 150, title: 'Nụ Cười Thiên Thần', icon: '😊', desc: 'Tiếng cười giòn tan của bé làm ấm cả ngôi nhà.' },
+            { id: 'm3', points: 300, title: 'Chuyên Gia Ru Ngủ', icon: '🌙', desc: 'Bé luôn ngủ thật ngon trong vòng tay yêu thương của ba mẹ.' },
+            { id: 'm4', points: 500, title: 'Gia Đình Hạnh Phúc Viên Mãn', icon: '🏡', desc: 'Tổ ấm nhỏ tràn ngập tình yêu thương vô bờ bến!' }
+        ];
+
+        function goToBabyScreen() {
+            initAudio();
+            GardenSFX.startClick();
+            document.getElementById('screen-garden').classList.add('hidden');
+            document.getElementById('screen-baby').classList.remove('hidden');
+            updateBabyUI();
+            startBabyLoop();
+        }
+
+        function goBackToGardenFromBaby() {
+            GardenSFX.plantSeed();
+            if (babyLoopTimer) {
+                clearInterval(babyLoopTimer);
+                babyLoopTimer = null;
+            }
+            document.getElementById('screen-baby').classList.add('hidden');
+            document.getElementById('screen-garden').classList.remove('hidden');
+        }
+
+        function startBabyLoop() {
+            if (babyLoopTimer) clearInterval(babyLoopTimer);
+            babyLoopTimer = setInterval(() => {
+                if (babyState.isSleeping) {
+                    babyState.sleep = Math.min(100, babyState.sleep + 4);
+                    babyState.hunger = Math.max(0, babyState.hunger - 0.8);
+                    babyState.milk = Math.max(0, babyState.milk - 0.8);
+                    if (babyState.sleep >= 100) {
+                        babyState.isSleeping = false;
+                        babyState.happy = Math.min(100, babyState.happy + 10);
+                        setBabySpeech(`“Oaaa~ ${babyState.name} ngủ dậy rồi! Khỏe khoắn quá đi!”`, '🌞');
+                        GardenSFX.bloom();
+                    }
+                } else {
+                    babyState.hunger = Math.max(0, babyState.hunger - 1.5);
+                    babyState.milk = Math.max(0, babyState.milk - 1.5);
+                    babyState.sleep = Math.max(0, babyState.sleep - 1.2);
+                    babyState.happy = Math.max(0, babyState.happy - 1.3);
+                }
+                updateBabyUI();
+            }, 1500);
+        }
+
+        function actionFeedBaby() {
+            initAudio();
+            if (babyState.isSleeping) wakeBabyUpFirst();
+            if (babyState.hunger >= 98) {
+                GardenSFX.babyGiggle();
+                setBabySpeech(`“${babyState.name} no căng bụng rồi ba mẹ ơi! 😋”`, '😋');
+                spawnFloatingFX(window.innerWidth / 2, window.innerHeight * 0.45, 'Bé đã no rồi! 😋', '#f59e0b');
+                return;
+            }
+            babyState.hunger = Math.min(100, babyState.hunger + 24);
+            babyState.happy = Math.min(100, babyState.happy + 8);
+            addFamilyBondPoints(15);
+            GardenSFX.babyEat();
+            showBabyProp('🥣');
+            triggerBabyGiggleAnim();
+            setBabySpeech(`“Măm măm... Cháo ba mẹ nấu ngon tuyệt! 😋”`, '😋');
+            spawnHeartBurst(window.innerWidth / 2, window.innerHeight * 0.45, 8);
+            spawnFloatingFX(window.innerWidth / 2, window.innerHeight * 0.38, '+24% Độ No 🥣  +15 Gắn Kết', '#ea580c');
+            updateBabyUI();
+        }
+
+        function actionGiveMilk() {
+            initAudio();
+            if (babyState.isSleeping) wakeBabyUpFirst();
+            if (babyState.milk >= 98) {
+                GardenSFX.babyGiggle();
+                setBabySpeech(`“${babyState.name} uống đủ sữa ấm rồi ạ! 🍼”`, '🥰');
+                spawnFloatingFX(window.innerWidth / 2, window.innerHeight * 0.45, 'Bé đã uống đủ sữa! 🍼', '#0284c7');
+                return;
+            }
+            babyState.milk = Math.min(100, babyState.milk + 26);
+            babyState.hunger = Math.min(100, babyState.hunger + 10);
+            babyState.happy = Math.min(100, babyState.happy + 8);
+            addFamilyBondPoints(15);
+            GardenSFX.babyDrink();
+            showBabyProp('🍼');
+            setBabyExpression('happy', 'o');
+            setBabySpeech(`“Ực ực... Bình sữa ấm áp thơm quá đi! 🍼”`, '🍼');
+            spawnHeartBurst(window.innerWidth / 2, window.innerHeight * 0.45, 8);
+            spawnFloatingFX(window.innerWidth / 2, window.innerHeight * 0.38, '+26% Sữa Ấm 🍼  +15 Gắn Kết', '#0284c7');
+            setTimeout(() => updateBabyUI(), 900);
+        }
+
+        function actionLullabySleep() {
+            initAudio();
+            if (babyState.isSleeping) {
+                babyState.isSleeping = false;
+                setBabySpeech(`“${babyState.name} thức dậy rồi nè ba mẹ ơi! 🌞”`, '😊');
+                GardenSFX.plantSeed();
+                updateBabyUI();
+                return;
+            }
+            babyState.isSleeping = true;
+            babyState.sleep = Math.min(100, babyState.sleep + 18);
+            addFamilyBondPoints(20);
+            GardenSFX.lullabySong();
+            setBabySpeech(`“Khò khò... Tiếng hát ru của ba mẹ êm quá... 💤”`, '😴');
+            spawnFloatingFX(window.innerWidth / 2, window.innerHeight * 0.38, 'Đang ru bé ngủ ngon... 🌙', '#6366f1');
+            updateBabyUI();
+        }
+
+        function actionTickleBaby() {
+            initAudio();
+            if (babyState.isSleeping) wakeBabyUpFirst();
+            babyState.happy = Math.min(100, babyState.happy + 25);
+            addFamilyBondPoints(18);
+            GardenSFX.babyGiggle();
+            showBabyProp('🧸');
+            triggerBabyGiggleAnim();
+            setBabyExpression('giggle', 'smile');
+            const giggleQuotes = [
+                `“Hihi haha! Nhột quá ba mẹ ơi! Con yêu ba mẹ nhất! 💖”`,
+                `“Khúc khích... Lục lạc vui quá đi mất! 🥰”`,
+                `“Hihi! Ba mẹ chơi với ${babyState.name} vui quá! ✨”`
+            ];
+            setBabySpeech(giggleQuotes[Math.floor(Math.random() * giggleQuotes.length)], '😆');
+            spawnHeartBurst(window.innerWidth / 2, window.innerHeight * 0.44, 14);
+            spawnFloatingFX(window.innerWidth / 2, window.innerHeight * 0.36, '+25% Niềm Vui 😄  +18 Gắn Kết', '#e11d48');
+            setTimeout(() => updateBabyUI(), 1100);
+        }
+
+        function wakeBabyUpFirst() {
+            babyState.isSleeping = false;
+            updateBabyUI();
+        }
+
+        function showBabyProp(emoji) {
+            const prop = document.getElementById('baby-action-prop');
+            prop.textContent = emoji;
+            prop.classList.remove('hidden');
+            prop.style.transform = 'translate(22px, -10px) scale(1.15)';
+            setTimeout(() => {
+                prop.classList.add('hidden');
+                prop.style.transform = '';
+            }, 950);
+        }
+
+        function triggerBabyGiggleAnim() {
+            const wrapper = document.getElementById('baby-character-wrapper');
+            wrapper.classList.remove('animate-baby-idle');
+            wrapper.classList.add('animate-baby-giggle');
+            setTimeout(() => {
+                wrapper.classList.remove('animate-baby-giggle');
+                wrapper.classList.add('animate-baby-idle');
+            }, 1100);
+        }
+
+        function setBabyExpression(eyeType, mouthType) {
+            ['happy', 'giggle', 'sleep', 'sad'].forEach(t => {
+                document.getElementById(`baby-eyes-${t}`).classList.toggle('hidden', t !== eyeType);
+            });
+            ['smile', 'o', 'sad'].forEach(m => {
+                document.getElementById(`baby-mouth-${m}`).classList.toggle('hidden', m !== mouthType);
+            });
+        }
+
+        function setBabySpeech(text, icon) {
+            document.getElementById('baby-speech').textContent = text;
+            if (icon) document.getElementById('baby-mood-icon').textContent = icon;
+        }
+
+        function updateBabyUI() {
+            document.getElementById('baby-name-display').textContent = babyState.name;
+            document.getElementById('baby-bond-points').textContent = babyState.bondPoints;
+            document.getElementById('baby-milestone-badge').textContent = `${babyState.unlockedMilestones.length}/${FAMILY_MILESTONES.length}`;
+
+            const h = Math.round(babyState.hunger);
+            const m = Math.round(babyState.milk);
+            const s = Math.round(babyState.sleep);
+            const ha = Math.round(babyState.happy);
+
+            document.getElementById('stat-hunger-val').textContent = h + '%';
+            document.getElementById('stat-hunger-bar').style.width = h + '%';
+            document.getElementById('stat-milk-val').textContent = m + '%';
+            document.getElementById('stat-milk-bar').style.width = m + '%';
+            document.getElementById('stat-sleep-val').textContent = s + '%';
+            document.getElementById('stat-sleep-bar').style.width = s + '%';
+            document.getElementById('stat-happy-val').textContent = ha + '%';
+            document.getElementById('stat-happy-bar').style.width = ha + '%';
+
+            const nightOverlay = document.getElementById('baby-night-overlay');
+            const zzzFx = document.getElementById('baby-zzz-fx');
+            const btnLullabyLabel = document.getElementById('btn-lullaby-label');
+            const needBubble = document.getElementById('baby-need-bubble');
+
+            if (babyState.isSleeping) {
+                nightOverlay.classList.remove('hidden');
+                zzzFx.classList.remove('hidden');
+                needBubble.classList.add('hidden');
+                btnLullabyLabel.textContent = 'Đánh thức';
+                setBabyExpression('sleep', 'o');
+                return;
+            } else {
+                nightOverlay.classList.add('hidden');
+                zzzFx.classList.add('hidden');
+                btnLullabyLabel.textContent = 'Ru con ngủ';
+            }
+
+            if (h < 35) { setBabyExpression('sad', 'sad'); needBubble.textContent = '🥣'; needBubble.classList.remove('hidden'); }
+            else if (m < 35) { setBabyExpression('sad', 'sad'); needBubble.textContent = '🍼'; needBubble.classList.remove('hidden'); }
+            else if (s < 35) { setBabyExpression('sleep', 'o'); needBubble.textContent = '💤'; needBubble.classList.remove('hidden'); }
+            else if (ha < 40) { setBabyExpression('sad', 'sad'); needBubble.textContent = '🧸'; needBubble.classList.remove('hidden'); }
+            else {
+                needBubble.classList.add('hidden');
+                setBabyExpression(ha >= 85 ? 'giggle' : 'happy', 'smile');
+            }
+        }
+
+        function addFamilyBondPoints(pts) {
+            babyState.bondPoints += pts;
+            FAMILY_MILESTONES.forEach(ms => {
+                if (babyState.bondPoints >= ms.points && !babyState.unlockedMilestones.includes(ms.id)) {
+                    babyState.unlockedMilestones.push(ms.id);
+                    GardenSFX.bouquetCelebrate();
+                    spawnFloatingBanner(window.innerWidth / 2, window.innerHeight * 0.25, `🏆 Đạt danh hiệu: ${ms.title}!`);
+                }
+            });
+        }
+
+        function openRenameBabyModal() {
+            document.getElementById('input-baby-name').value = babyState.name;
+            document.getElementById('modal-rename-baby').classList.remove('hidden');
+        }
+
+        function closeRenameBabyModal() {
+            document.getElementById('modal-rename-baby').classList.add('hidden');
+        }
+
+        function saveBabyName() {
+            const val = document.getElementById('input-baby-name').value.trim();
+            if (val) {
+                babyState.name = val;
+                updateBabyUI();
+                setBabySpeech(`“Dạ! Từ giờ con tên là ${babyState.name} ạ! 💖”`, '🥰');
+            }
+            closeRenameBabyModal();
+        }
+
+        function openFamilyMilestonesModal() {
+            const list = document.getElementById('family-milestones-list');
+            list.innerHTML = '';
+            FAMILY_MILESTONES.forEach(ms => {
+                const unlocked = babyState.unlockedMilestones.includes(ms.id);
+                const div = document.createElement('div');
+                div.className = `p-3.5 rounded-2xl border-2 ${unlocked ? 'bg-amber-50 border-amber-300' : 'bg-gray-100 border-gray-200 opacity-70'}`;
+                div.innerHTML = `
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="font-extrabold text-sm ${unlocked ? 'text-amber-800' : 'text-gray-500'}">${unlocked ? ms.icon : '🔒'} ${ms.title}</span>
+                        <span class="text-xs font-bold px-2 py-0.5 rounded-full ${unlocked ? 'bg-rose-500 text-white' : 'bg-gray-200 text-gray-600'}">${ms.points} điểm</span>
+                    </div>
+                    <p class="text-xs text-gray-600 font-medium">${ms.desc}</p>
+                `;
+                list.appendChild(div);
+            });
+            document.getElementById('modal-family-milestones').classList.remove('hidden');
+        }
+
+        function closeFamilyMilestonesModal() {
+            document.getElementById('modal-family-milestones').classList.add('hidden');
+        }
+
+        /* ======================================================================
+           4. SINH HOẠT CẶP ĐÔI
+           ====================================================================== */
+        let coupleLifePoints = 0;
+        let coupleBoyName = 'Áo Trắng';
+        let coupleGirlName = 'Áo Vàng';
+        let isCoupleSleeping = false;
+        let lampMode = 'off';
+        let lampClickCount = 0;
+        let lampClickTimer = null;
+
+        const HUG_BOY_QUOTES = ['”nhớ vo quá đi”', '”yêu embe nhiều lắm”', '”bé có mệt không”', '”hôm nay bé xinh quá”'];
+        const HUG_GIRL_QUOTES = ['”nhớ oxa quá”', '”yêuu bé nhất tg”', '”khoẻ hơn hẳn”'];
+        const KISS_BOY_QUOTES = ['”đã quá”', '”phê quá”', '”sướngggggg”', '”điii ga dùmm cái”', '”hỏng ưa”'];
+        const KISS_GIRL_QUOTES = ['”đãaaa”', '”pheeeeeee”', '”yêuuu quá đi hoii”', '”hihihi đã vl”'];
+        let hugQuoteIdx = 0;
+        let kissQuoteIdx = 0;
+
+        function openRenameCoupleModal() {
+            document.getElementById('input-couple-boy-name').value = coupleBoyName;
+            document.getElementById('input-couple-girl-name').value = coupleGirlName;
+            document.getElementById('modal-rename-couple').classList.remove('hidden');
+        }
+
+        function closeRenameCoupleModal() {
+            document.getElementById('modal-rename-couple').classList.add('hidden');
+        }
+
+        function saveCoupleNames() {
+            const boyVal = document.getElementById('input-couple-boy-name').value.trim();
+            const girlVal = document.getElementById('input-couple-girl-name').value.trim();
+            if (boyVal) coupleBoyName = boyVal;
+            if (girlVal) coupleGirlName = girlVal;
+            updateCoupleNameLabels();
+            closeRenameCoupleModal();
+            GardenSFX.plantSeed();
+        }
+
+        function updateCoupleNameLabels() {
+            document.getElementById('couple-name-boy-badge').textContent = coupleBoyName;
+            document.getElementById('couple-name-girl-badge').textContent = coupleGirlName;
+            document.getElementById('label-boy-life').textContent = `👕 ${coupleBoyName}`;
+            document.getElementById('label-girl-life').textContent = `👗 ${coupleGirlName}`;
+        }
+
+        function goToCoupleLifeScreen() {
+            initAudio();
+            GardenSFX.startClick();
+            if (babyLoopTimer) {
+                clearInterval(babyLoopTimer);
+                babyLoopTimer = null;
+            }
+            document.getElementById('screen-baby').classList.add('hidden');
+            document.getElementById('screen-couple-life').classList.remove('hidden');
+            resetCoupleSceneProps();
+            updateCoupleNameLabels();
+            updateCoupleLifeUI();
+        }
+
+        function goBackToBabyFromCoupleLife() {
+            GardenSFX.plantSeed();
+            document.getElementById('screen-couple-life').classList.add('hidden');
+            document.getElementById('screen-baby').classList.remove('hidden');
+            updateBabyUI();
+            startBabyLoop();
+        }
+
+        function resetCoupleSceneProps() {
+            isCoupleSleeping = false;
+            document.getElementById('couple-kiss-fx').classList.add('hidden');
+            document.getElementById('couple-dual-bubbles').classList.add('hidden');
+            document.getElementById('couple-active-food-icon').classList.add('hidden');
+            document.getElementById('scene-dining-table').classList.add('hidden');
+            document.getElementById('scene-bed').classList.add('hidden');
+            document.getElementById('scene-commute').classList.add('hidden');
+            document.getElementById('life-boy-briefcase').classList.add('hidden');
+            document.getElementById('life-girl-bag').classList.add('hidden');
+            document.getElementById('life-boy-food-hand').classList.add('hidden');
+            document.getElementById('life-girl-food-hand').classList.add('hidden');
+            document.getElementById('life-boy-wrap').style.transform = 'translateX(0px)';
+            document.getElementById('life-girl-wrap').style.transform = 'translateX(0px)';
+            setCoupleLifeEyesClosed(false);
+        }
+
+        function showDualSpeech(boyText, girlText) {
+            document.getElementById('speech-boy-life').textContent = boyText;
+            document.getElementById('speech-girl-life').textContent = girlText;
+            document.getElementById('couple-dual-bubbles').classList.remove('hidden');
+        }
+
+        function setCoupleLifeEyesClosed(closed) {
+            ['boy', 'girl'].forEach(who => {
+                document.getElementById(`life-${who}-eyes-open`).classList.toggle('hidden', closed);
+                document.getElementById(`life-${who}-eyes-closed`).classList.toggle('hidden', !closed);
+            });
+        }
+
+        function addCoupleLifeScore(pts, label) {
+            coupleLifePoints += pts;
+            document.getElementById('couple-life-points').textContent = coupleLifePoints;
+            if (label) {
+                spawnFloatingFX(window.innerWidth / 2, window.innerHeight * 0.25, `+${pts} Hạnh Phúc (${label})`, '#e11d48');
+            }
+        }
+
+        function coupleActionHug() {
+            initAudio();
+            resetCoupleSceneProps();
+            const shift = window.innerWidth < 640 ? 34 : 46;
+            document.getElementById('life-boy-wrap').style.transform = `translateX(${shift}px) scale(1.03)`;
+            document.getElementById('life-girl-wrap').style.transform = `translateX(-${shift}px) scale(1.03)`;
+            setCoupleLifeEyesClosed(true);
+
+            showDualSpeech(
+                HUG_BOY_QUOTES[hugQuoteIdx % HUG_BOY_QUOTES.length],
+                HUG_GIRL_QUOTES[hugQuoteIdx % HUG_GIRL_QUOTES.length]
+            );
+            hugQuoteIdx++;
+
+            GardenSFX.bloom();
+            addCoupleLifeScore(20, 'Ôm nhau thật ấm 🤗');
+            document.getElementById('couple-life-speech').textContent = '“Hai người đang ôm nhau thật chặt... Ấm áp và bình yên quá!”';
+            spawnHeartBurst(window.innerWidth / 2, window.innerHeight * 0.45, 16);
+        }
+
+        function coupleActionKiss() {
+            initAudio();
+            resetCoupleSceneProps();
+            const shift = window.innerWidth < 640 ? 38 : 52;
+            document.getElementById('life-boy-wrap').style.transform = `translateX(${shift}px)`;
+            document.getElementById('life-girl-wrap').style.transform = `translateX(-${shift}px)`;
+            setCoupleLifeEyesClosed(true);
+            document.getElementById('couple-kiss-fx').classList.remove('hidden');
+
+            showDualSpeech(
+                KISS_BOY_QUOTES[kissQuoteIdx % KISS_BOY_QUOTES.length],
+                KISS_GIRL_QUOTES[kissQuoteIdx % KISS_GIRL_QUOTES.length]
+            );
+            kissQuoteIdx++;
+
+            GardenSFX.bouquetCelebrate();
+            addCoupleLifeScore(25, 'Nụ hôn ngọt ngào 💋');
+            document.getElementById('couple-life-speech').textContent = '“Chụt~ Một nụ hôn ngọt ngào dành cho người thương nè!”';
+            spawnHeartBurst(window.innerWidth / 2, window.innerHeight * 0.36, 20);
+        }
+
+        function coupleActionEatTogether() {
+            initAudio();
+            resetCoupleSceneProps();
+            document.getElementById('scene-dining-table').classList.remove('hidden');
+            document.getElementById('life-boy-wrap').style.transform = 'translateX(-14px) translateY(-10px)';
+            document.getElementById('life-girl-wrap').style.transform = 'translateX(14px) translateY(-10px)';
+            GardenSFX.babyEat();
+            addCoupleLifeScore(20, 'Bữa ăn ấm cúng 🍽️');
+            document.getElementById('couple-life-speech').textContent = '“Bấm vào món ăn trên bàn để cùng thưởng thức nhé!”';
+        }
+
+        function coupleEatFoodItem(emoji, foodName, event) {
+            initAudio();
+            const boyFood = document.getElementById('life-boy-food-hand');
+            const girlFood = document.getElementById('life-girl-food-hand');
+            const activeFoodIcon = document.getElementById('couple-active-food-icon');
+
+            activeFoodIcon.textContent = emoji;
+            activeFoodIcon.classList.remove('hidden');
+            boyFood.textContent = emoji;
+            girlFood.textContent = emoji;
+            boyFood.classList.remove('hidden');
+            girlFood.classList.remove('hidden');
+
+            setCoupleLifeEyesClosed(true);
+            GardenSFX.babyEat();
+            addCoupleLifeScore(15);
+
+            const fxX = event && event.clientX ? event.clientX : window.innerWidth / 2;
+            const fxY = event && event.clientY ? event.clientY : window.innerHeight * 0.5;
+            spawnFallingFoodIcon(fxX, emoji);
+            spawnHeartBurst(fxX, fxY, 10);
+
+            clearTimeout(window.coupleEatTimer);
+            window.coupleEatTimer = setTimeout(() => {
+                boyFood.classList.add('hidden');
+                girlFood.classList.add('hidden');
+                setCoupleLifeEyesClosed(false);
+            }, 1500);
+        }
+
+        function spawnFallingFoodIcon(x, emoji) {
+            const fxLayer = document.getElementById('fx-layer');
+            const el = document.createElement('div');
+            el.textContent = emoji;
+            el.style.position = 'fixed';
+            const clampedX = Math.min(window.innerWidth - 40, Math.max(40, x + (Math.random() - 0.5) * 50));
+            el.style.left = clampedX + 'px';
+            el.style.top = '70px';
+            el.style.fontSize = '34px';
+            el.style.transform = 'translate(-50%, -50%) rotate(-12deg) scale(0.9)';
+            el.style.transition = 'top 0.85s cubic-bezier(0.22, 1, 0.36, 1), transform 0.85s ease-out, opacity 0.4s ease-in 0.55s';
+            el.style.opacity = '1';
+            fxLayer.appendChild(el);
+
+            requestAnimationFrame(() => {
+                el.style.top = Math.min(window.innerHeight - 110, window.innerHeight * 0.65) + 'px';
+                el.style.transform = 'translate(-50%, -50%) rotate(18deg) scale(1.15)';
+            });
+            setTimeout(() => { el.style.opacity = '0'; }, 600);
+            setTimeout(() => el.remove(), 1000);
+        }
+
+        function coupleActionGoToWork() {
+            initAudio();
+            resetCoupleSceneProps();
+            document.getElementById('scene-commute').classList.remove('hidden');
+            document.getElementById('life-boy-briefcase').classList.remove('hidden');
+            document.getElementById('life-girl-bag').classList.remove('hidden');
+            document.getElementById('life-boy-wrap').style.transform = 'translateX(-12px)';
+            document.getElementById('life-girl-wrap').style.transform = 'translateX(12px)';
+            GardenSFX.startClick();
+            addCoupleLifeScore(20, 'Cùng đi làm 💼');
+            document.getElementById('couple-life-speech').textContent = '“Xách túi lên và cùng nhau đi làm thôi! Hôm nay làm việc thật hiệu quả nhé!”';
+            spawnFloatingFX(window.innerWidth / 2, window.innerHeight * 0.4, 'Cố gắng hết mình nha! 💼✨', '#0284c7');
+        }
+
+        function coupleActionGoToSleep() {
+            initAudio();
+            resetCoupleSceneProps();
+            isCoupleSleeping = true;
+            document.getElementById('scene-bed').classList.remove('hidden');
+            const shift = window.innerWidth < 640 ? 26 : 36;
+            document.getElementById('life-boy-wrap').style.transform = `translateX(${shift}px) translateY(8px)`;
+            document.getElementById('life-girl-wrap').style.transform = `translateX(-${shift}px) translateY(8px)`;
+            setCoupleLifeEyesClosed(true);
+
+            lampMode = 'off';
+            updateCoupleLifeUI();
+
+            GardenSFX.lullabySong();
+            addCoupleLifeScore(25, 'Cùng đi ngủ ngon 🛌');
+            document.getElementById('couple-life-speech').textContent = '“HÔM NAY ĐÃ MỆT RỒI VCHONG MÌNH CÙNG NGỦ NHÉ”';
+            spawnFloatingBanner(window.innerWidth / 2, window.innerHeight * 0.32, 'HÔM NAY ĐÃ MỆT RỒI VCHONG MÌNH CÙNG NGỦ NHÉ');
+        }
+
+        function handleRoomLampClick() {
+            initAudio();
+            lampClickCount++;
+            if (lampClickTimer) clearTimeout(lampClickTimer);
+
+            if (lampClickCount >= 2) {
+                lampClickCount = 0;
+                lampMode = 'blink';
+                GardenSFX.fertilizer();
+                document.getElementById('couple-life-speech').textContent = '“Đèn đang nhấp nháy vui quá nè!”';
+                updateCoupleLifeUI();
+                return;
+            }
+
+            lampClickTimer = setTimeout(() => {
+                lampClickCount = 0;
+                if (lampMode === 'off') {
+                    lampMode = 'on';
+                    GardenSFX.water();
+                    document.getElementById('couple-life-speech').textContent = '“Đèn đã được BẬT sáng ấm áp rồi!”';
+                } else {
+                    lampMode = 'off';
+                    GardenSFX.plantSeed();
+                    if (isCoupleSleeping) {
+                        document.getElementById('couple-life-speech').textContent = '“HÔM NAY ĐÃ MỆT RỒI VCHONG MÌNH CÙNG NGỦ NHÉ”';
+                        spawnFloatingBanner(window.innerWidth / 2, window.innerHeight * 0.32, 'HÔM NAY ĐÃ MỆT RỒI VCHONG MÌNH CÙNG NGỦ NHÉ');
+                    } else {
+                        document.getElementById('couple-life-speech').textContent = '“Đèn đã được TẮT rồi nè!”';
+                    }
+                }
+                updateCoupleLifeUI();
+            }, 260);
+        }
+
+        function updateCoupleLifeUI() {
+            const lampLayer = document.getElementById('couple-lamp-layer');
+            const lampIcon = document.getElementById('room-lamp-icon');
+            const lampLabel = document.getElementById('room-lamp-label');
+            lampLayer.classList.remove('animate-lamp-blink');
+
+            if (lampMode === 'on') {
+                lampLayer.style.background = 'radial-gradient(circle at 50% 30%, rgba(255, 243, 176, 0.42), rgba(255, 183, 3, 0.14) 70%)';
+                lampLayer.style.opacity = '1';
+                lampIcon.textContent = '💡';
+                lampLabel.textContent = 'Đèn: Bật';
+            } else if (lampMode === 'blink') {
+                lampLayer.style.opacity = '1';
+                lampLayer.classList.add('animate-lamp-blink');
+                lampIcon.textContent = '⚡';
+                lampLabel.textContent = 'Đèn: Chớp';
+            } else {
+                lampLayer.style.background = 'rgba(15, 23, 42, 0.35)';
+                lampLayer.style.opacity = '1';
+                lampIcon.textContent = '🌑';
+                lampLabel.textContent = 'Đèn: Tắt';
+            }
+        }
+
+        /* ======================================================================
+           5. TRẮC NGHIỆM 10 CÂU & TRANG CUỐI
+           ====================================================================== */
+        const LOVE_QUIZ_QUESTIONS = [
+            {
+                q: 'Vy muốn hai đứa làm gì cùng nhau nhiều nhất?',
+                options: { A: 'Đi du lịch', B: 'Nấu ăn', C: 'Xem phim', D: 'Cùng xây dựng tương lai' },
+                correct: 'D',
+                sweetNote: 'Dù làm gì cùng nhau thì ở cạnh nhau là vui nhất!'
+            },
+            {
+                q: 'Vy muốn hai đứa có bao nhiêu đứa con?',
+                options: { A: 'Một', B: 'Hai', C: 'Ba', D: 'Chưa nghĩ đến' },
+                correct: 'A',
+                sweetNote: 'Tổ ấm nhỏ của hai đứa lúc nào cũng đầy ắp tiếng cười!'
+            },
+            {
+                q: 'Vy có 10 cái kẹo, cho Trân 5 cái. Vậy Vy còn gì?',
+                options: { A: '5 cái kẹo', B: 'Không còn cái nào', C: 'Còn 10 cái vì Vy deo cho Trân đâu', D: 'Còn 5 cái và một người yêu' },
+                correct: 'C',
+                sweetNote: 'Chia kẹo cho nhau, chia cả yêu thương cho nhau!'
+            },
+            {
+                q: 'Một ngày có 24 tiếng, Trân dành 23 tiếng cho Vy. Tiếng còn lại dành cho ai?',
+                options: { A: 'Bạn bè', B: 'Gái', C: 'Bồ Nhí', D: 'Dành cho vợ tương lai' },
+                correct: 'D',
+                sweetNote: '23 tiếng + 1 tiếng vợ tương lai = 24 tiếng trọn vẹn cho Vy!'
+            },
+            {
+                q: 'Cái gì trên người Vy mà Trân thích nhất?',
+                options: { A: 'Mắt', B: 'Mũi', C: 'Cái gì cũng thích', D: 'Cốn lài' },
+                correct: 'C',
+                sweetNote: 'Nghe Trân trả lời là Vy chỉ có mỉm cười thôi!'
+            },
+            {
+                q: 'Điều gì ở Trân mà Vy thấy thích nhất?',
+                options: { A: 'Ngoan', B: 'Thích mọi thứ về Trân', C: 'Trân đẹp', D: 'Quá ngonn' },
+                correct: 'B',
+                sweetNote: 'Cả hai đều cưng nhau hết nấc luôn!'
+            },
+            {
+                q: 'Tự dưng có nhỏ kia ngồi lên đùi Trân, Trân sẽ làm gì?',
+                options: { A: 'Ôm nó', B: 'Đẩy nó ra', C: 'Đá nó ra chỗ khác', D: 'Đi về méc vợ' },
+                correct: 'D',
+                sweetNote: 'Biết đường tự giác tránh xa và về méc vợ là chuẩn bài!'
+            },
+            {
+                q: 'Đang cãi nhau thì có gái nhắn tin an ủi Trân sẽ?',
+                options: { A: 'Trả lời nó liền', B: 'Nói xấu vợ với nhỏ đó', C: 'Nhắn tin xin lỗi vợ (không cần biết lỗi ai) và méc vợ', D: 'Yêu nó luôn' },
+                correct: 'C',
+                sweetNote: 'Xin lỗi vợ và báo cáo ngay cho vợ là chân ái!'
+            },
+            {
+                q: 'Nếu Vy thành con rắn Trân sẽ làm gì?',
+                options: { A: 'Đập chết Vy', B: 'Đem vô phòng ngủ chung', C: 'Kệ nhắm mắt yêu luôn', D: 'Đi yêu nhỏ khác' },
+                correct: 'C',
+                sweetNote: 'Dù thành hình dạng nào thì tình cảm của hai đứa vẫn không đổi!'
+            },
+            {
+                q: '“Eo ơi vợ mày xấu, vậy mà cũng yêu”',
+                options: { A: 'Đồng ý với ý kiến đó', B: 'Ủng hộ ý kiến đó', C: '“ĐỜI BỐ, BỐ QUẢN”', D: '“Thế mày có muốn làm vợ t không”' },
+                correct: 'C',
+                sweetNote: 'Vợ mình là đẹp nhất trong mắt mình rồi, ai ý kiến kệ họ!'
+            }
+        ];
+
+        let quizCurrentIndex = 0;
+        let quizScore = 0;
+        let quizAnswered = false;
+
+        function goToLoveQuizScreen() {
+            initAudio();
+            GardenSFX.startClick();
+            document.getElementById('screen-couple-life').classList.add('hidden');
+            document.getElementById('screen-love-quiz').classList.remove('hidden');
+            renderLoveQuizQuestion();
+            updateLoveQuizHUD();
+        }
+
+        function goBackToCoupleLifeFromQuiz() {
+            GardenSFX.plantSeed();
+            document.getElementById('screen-love-quiz').classList.add('hidden');
+            document.getElementById('screen-couple-life').classList.remove('hidden');
+        }
+
+        function updateLoveQuizHUD() {
+            const total = LOVE_QUIZ_QUESTIONS.length;
+            document.getElementById('quiz-progress-text').textContent = `${Math.min(quizCurrentIndex + 1, total)}/${total}`;
+            document.getElementById('quiz-score-text').textContent = quizScore;
+        }
+
+        function renderLoveQuizQuestion() {
+            quizAnswered = false;
+            document.getElementById('quiz-feedback-bar').classList.add('hidden');
+            document.getElementById('quiz-summary-box').classList.add('hidden');
+            document.getElementById('quiz-question-text').classList.remove('hidden');
+            document.getElementById('quiz-options-grid').classList.remove('hidden');
+
+            const item = LOVE_QUIZ_QUESTIONS[quizCurrentIndex];
+            document.getElementById('quiz-question-text').textContent = `${quizCurrentIndex + 1}. ${item.q}`;
+
+            const grid = document.getElementById('quiz-options-grid');
+            grid.innerHTML = '';
+
+            const keyStyles = {
+                A: 'bg-rose-50 hover:bg-rose-100 border-rose-300 text-rose-900',
+                B: 'bg-amber-50 hover:bg-amber-100 border-amber-300 text-amber-900',
+                C: 'bg-sky-50 hover:bg-sky-100 border-sky-300 text-sky-900',
+                D: 'bg-fuchsia-50 hover:bg-fuchsia-100 border-fuchsia-300 text-fuchsia-900'
+            };
+
+            ['A', 'B', 'C', 'D'].forEach(key => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.id = `quiz-opt-${key}`;
+                btn.onclick = (e) => selectLoveQuizOption(key, e);
+                btn.className = `w-full text-left p-3.5 sm:p-4 rounded-2xl border-2 font-bold text-xs sm:text-sm shadow-xs transition active:scale-98 flex items-start gap-2.5 cursor-pointer ${keyStyles[key]}`;
+                btn.innerHTML = `
+                    <span class="w-7 h-7 rounded-xl bg-white border border-current/25 flex items-center justify-center font-extrabold text-sm shrink-0">${key}.</span>
+                    <span class="leading-snug pt-0.5">${item.options[key]}</span>
+                `;
+                grid.appendChild(btn);
+            });
+            updateLoveQuizHUD();
+        }
+
+        function selectLoveQuizOption(key, event) {
+            if (quizAnswered) return;
+            quizAnswered = true;
+
+            const item = LOVE_QUIZ_QUESTIONS[quizCurrentIndex];
+            const isCorrect = key === item.correct;
+            const fxX = event && event.clientX ? event.clientX : window.innerWidth / 2;
+            const fxY = event && event.clientY ? event.clientY : window.innerHeight * 0.5;
+            const feedbackBar = document.getElementById('quiz-feedback-bar');
+            const feedbackText = document.getElementById('quiz-feedback-text');
+            const btnNext = document.getElementById('btn-quiz-next');
+
+            if (isCorrect) {
+                quizScore += 20;
+                updateLoveQuizHUD();
+                ['A', 'B', 'C', 'D'].forEach(k => {
+                    const btn = document.getElementById(`quiz-opt-${k}`);
+                    if (k === key) btn.classList.add('ring-4', 'ring-emerald-400', 'bg-emerald-100', 'border-emerald-500');
+                    else btn.classList.add('opacity-60');
+                });
+                GardenSFX.bloom();
+                spawnHeartBurst(fxX, fxY, 10);
+                spawnFloatingFX(fxX, fxY - 20, `Đúng rồi! +20 💖`, '#059669');
+                feedbackText.textContent = `🎉 Chuẩn xác (${key}): ${item.sweetNote}`;
+            } else {
+                quizScore -= 10;
+                updateLoveQuizHUD();
+                ['A', 'B', 'C', 'D'].forEach(k => {
+                    const btn = document.getElementById(`quiz-opt-${k}`);
+                    if (k === key) btn.classList.add('ring-4', 'ring-rose-500', 'bg-rose-200', 'border-rose-500');
+                    else if (k === item.correct) btn.classList.add('ring-4', 'ring-emerald-400', 'bg-emerald-100', 'border-emerald-500');
+                    else btn.classList.add('opacity-60');
+                });
+                GardenSFX.error();
+                spawnFloatingFX(fxX, fxY - 20, `Sai rồi! -10 yêu thương 💔`, '#e11d48');
+                feedbackText.textContent = `💔 Sai rồi (-10 yêu thương)! Đáp án đúng là ${item.correct}: ${item.options[item.correct]}`;
+            }
+
+            btnNext.textContent = quizCurrentIndex < LOVE_QUIZ_QUESTIONS.length - 1 ? 'Câu tiếp theo ➡️' : 'Xem kết quả 🏆';
+            feedbackBar.classList.remove('hidden');
+        }
+
+        function nextLoveQuizQuestion() {
+            GardenSFX.plantSeed();
+            quizCurrentIndex++;
+            if (quizCurrentIndex < LOVE_QUIZ_QUESTIONS.length) renderLoveQuizQuestion();
+            else showLoveQuizSummary();
+        }
+
+        function showLoveQuizSummary() {
+            document.getElementById('quiz-question-text').classList.add('hidden');
+            document.getElementById('quiz-options-grid').classList.add('hidden');
+            document.getElementById('quiz-feedback-bar').classList.add('hidden');
+
+            document.getElementById('quiz-summary-desc').textContent =
+                `Hai bạn đã trả lời trọn vẹn ${LOVE_QUIZ_QUESTIONS.length} câu hỏi và đạt ${quizScore} Điểm Yêu! Dù chọn đáp án A, B, C hay D thì tình cảm của hai bạn vẫn luôn ngọt ngào nhất! 💕`;
+            document.getElementById('quiz-summary-box').classList.remove('hidden');
+
+            GardenSFX.bouquetCelebrate();
+            spawnHeartBurst(window.innerWidth * 0.35, window.innerHeight * 0.4, 16);
+            spawnHeartBurst(window.innerWidth * 0.65, window.innerHeight * 0.4, 16);
+        }
+
+        function goToFinalEndingScreen() {
+            initAudio();
+            GardenSFX.bouquetCelebrate();
+            document.getElementById('screen-love-quiz').classList.add('hidden');
+            document.getElementById('screen-final-ending').classList.remove('hidden');
+
+            document.getElementById('ending-love-banner').textContent = 'KHÁNH VY YÊU NGỌC TRÂN';
+            document.getElementById('ending-garden-love').textContent = lovePoints;
+            document.getElementById('ending-baby-bond').textContent = babyState.bondPoints;
+            document.getElementById('ending-quiz-score').textContent = quizScore;
+
+            spawnHeartBurst(window.innerWidth * 0.3, window.innerHeight * 0.35, 18);
+            spawnHeartBurst(window.innerWidth * 0.7, window.innerHeight * 0.35, 18);
+        }
+
+        function goBackToQuizFromEnding() {
+            GardenSFX.plantSeed();
+            document.getElementById('screen-final-ending').classList.add('hidden');
+            document.getElementById('screen-love-quiz').classList.remove('hidden');
+        }
+
+        function goToTitleFromEnding() {
+            GardenSFX.plantSeed();
+            document.getElementById('screen-final-ending').classList.add('hidden');
+            document.getElementById('screen-title').classList.remove('hidden');
+            setTimeout(() => document.getElementById('screen-title').classList.remove('opacity-0'), 30);
+        }
+
+        function replayWholeLoveGame() {
+            GardenSFX.startClick();
+            coins = 50;
+            lovePoints = 0;
+            harvestedFlowers = [];
+            unlockedCards = [];
+            plots = Array.from({ length: 6 }, (_, i) => ({
+                id: i, flowerId: null, stage: 0, progress: 0, needsWater: false, wateredCount: 0
+            }));
+            babyState.hunger = 75;
+            babyState.milk = 70;
+            babyState.sleep = 80;
+            babyState.happy = 85;
+            babyState.isSleeping = false;
+            babyState.bondPoints = 0;
+            babyState.unlockedMilestones = [];
+            coupleLifePoints = 0;
+            isCoupleSleeping = false;
+            lampMode = 'off';
+            quizCurrentIndex = 0;
+            quizScore = 0;
+            quizAnswered = false;
+
+            document.getElementById('screen-final-ending').classList.add('hidden');
+            document.getElementById('screen-title').classList.remove('hidden');
+            setTimeout(() => document.getElementById('screen-title').classList.remove('opacity-0'), 30);
+        }
+
+        function restartLoveQuiz() {
+            GardenSFX.startClick();
+            quizCurrentIndex = 0;
+            quizScore = 0;
+            updateLoveQuizHUD();
+            renderLoveQuizQuestion();
+        }
+
+        /* ======================================================================
+           6. HIỆU ỨNG HÌNH ẢNH
+           ====================================================================== */
+        function spawnFloatingBanner(x, y, text) {
+            const fxLayer = document.getElementById('fx-layer');
+            const banner = document.createElement('div');
+            banner.textContent = text;
+            banner.className = 'px-5 py-2.5 rounded-full bg-gradient-to-r from-rose-500 via-pink-500 to-amber-500 text-white font-extrabold text-sm sm:text-base border-2 border-white shadow-xl whitespace-nowrap';
+            banner.style.position = 'fixed';
+            banner.style.left = Math.min(window.innerWidth - 170, Math.max(170, x)) + 'px';
+            banner.style.top = y + 'px';
+            banner.style.transform = 'translate(-50%, -50%) scale(0.8)';
+            banner.style.transition = 'all 1.6s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+            banner.style.opacity = '1';
+            fxLayer.appendChild(banner);
+
+            requestAnimationFrame(() => {
+                banner.style.top = (y - 65) + 'px';
+                banner.style.transform = 'translate(-50%, -50%) scale(1.05)';
+            });
+            setTimeout(() => { banner.style.opacity = '0'; }, 1150);
+            setTimeout(() => banner.remove(), 1700);
+        }
+
+        function spawnFloatingFX(x, y, text, color) {
+            const fxLayer = document.getElementById('fx-layer');
+            const el = document.createElement('div');
+            el.textContent = text;
+            el.style.position = 'fixed';
+            el.style.left = x + 'px';
+            el.style.top = y + 'px';
+            el.style.transform = 'translate(-50%, -50%)';
+            el.style.color = color;
+            el.style.fontWeight = '800';
+            el.style.fontSize = '15px';
+            el.style.textShadow = '0 2px 6px rgba(255,255,255,0.95)';
+            el.style.transition = 'all 0.9s ease-out';
+            el.style.opacity = '1';
+            fxLayer.appendChild(el);
+
+            requestAnimationFrame(() => {
+                el.style.top = (y - 55) + 'px';
+                el.style.opacity = '0';
+            });
+            setTimeout(() => el.remove(), 950);
+        }
+
+        function spawnHeartBurst(x, y, count = 12) {
+            const fxLayer = document.getElementById('fx-layer');
+            const icons = ['💖', '💕', '🌸', '✨', '❤️'];
+            for (let i = 0; i < count; i++) {
+                const el = document.createElement('div');
+                el.textContent = icons[Math.floor(Math.random() * icons.length)];
+                el.style.position = 'fixed';
+                el.style.left = x + 'px';
+                el.style.top = y + 'px';
+                el.style.fontSize = (16 + Math.random() * 14) + 'px';
+                el.style.transition = 'all 1s cubic-bezier(0.165, 0.84, 0.44, 1)';
+                el.style.opacity = '1';
+                fxLayer.appendChild(el);
+
+                const angle = (Math.PI * 2 / count) * i + (Math.random() - 0.5) * 0.4;
+                const dist = 60 + Math.random() * 110;
+                const targetX = x + Math.cos(angle) * dist;
+                const targetY = y + Math.sin(angle) * dist - 30;
+
+                requestAnimationFrame(() => {
+                    el.style.left = targetX + 'px';
+                    el.style.top = targetY + 'px';
+                    el.style.transform = 'scale(0.5)';
+                    el.style.opacity = '0';
+                });
+                setTimeout(() => el.remove(), 1050);
+            }
+        }
+    </script>
+</body>
+</html>
